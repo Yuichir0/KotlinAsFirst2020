@@ -3,6 +3,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -68,8 +69,14 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String = TODO()
-
+fun ageDescription(age: Int): String {
+    return when {
+        (age % 100 > 4) and (age % 100 < 21) -> "$age лет"
+        age % 10 == 1 -> "$age год"
+        (age % 10 > 1) and (age % 10 < 5) -> "$age года"
+        else -> "$age лет"
+    }
+}
 /**
  * Простая (2 балла)
  *
@@ -81,7 +88,14 @@ fun timeForHalfWay(
     t1: Double, v1: Double,
     t2: Double, v2: Double,
     t3: Double, v3: Double
-): Double = TODO()
+): Double {
+    val s = t1 * v1 + t2 * v2 + t3 * v3
+    return when {
+        s / 2 < t1 * v1 -> s / 2 / v1
+        s / 2 - t1 * v1 < t2 * v2 -> (s / 2 - t1 * v1) / v2 + t1
+        else -> (s / 2 - t1 * v1 - t2 * v2) / v3 + t1 + t2
+    }
+}
 
 /**
  * Простая (2 балла)
@@ -96,7 +110,15 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int = TODO()
+): Int {
+    return when {
+        ((kingX == rookX1) or (kingY == rookY1)) and ((kingX == rookX2) or (kingY == rookY2)) -> 3
+        (kingX == rookX1) or (kingY == rookY1) -> 1
+        (kingX == rookX2) or (kingY == rookY2) -> 2
+        else -> 0
+    }
+}
+
 
 /**
  * Простая (2 балла)
@@ -112,7 +134,14 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int = TODO()
+): Int {
+    return when {
+        ((kingX == rookX) or (kingY == rookY)) and (abs(kingX - bishopX) == abs(kingY - bishopY)) -> 3
+        (kingX == rookX) or (kingY == rookY) -> 1
+        (abs(kingX - bishopX) == abs(kingY - bishopY)) -> 2
+        else -> 0
+    }
+}
 
 /**
  * Простая (2 балла)
@@ -122,7 +151,15 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    val cos = (a * a + b * b - c * c) / (2.0 * a * b)
+    return when {
+        (cos > 1.0) or (cos < -1.0) -> -1
+        cos > 0.0 -> 0
+        cos < 0.0 -> 2
+        else -> 1
+    }
+}
 
 /**
  * Средняя (3 балла)
