@@ -77,6 +77,7 @@ fun ageDescription(age: Int): String {
         else -> "$age лет"
     }
 }
+
 /**
  * Простая (2 балла)
  *
@@ -152,11 +153,14 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    val cos = (a * a + b * b - c * c) / (2.0 * a * b)
+    val max = maxOf(a, b, c)
+    val min = minOf(a, b, c)
+    val med = a + b + c - max - min
+    val cos = (min * min + med * med - max * max) / (2 * min * med)
     return when {
-        (cos > 1.0) or (cos < -1.0) -> -1
-        cos > 0.0 -> 0
-        cos < 0.0 -> 2
+        (cos > 1) or (cos < -1) -> -1
+        cos > 0 -> 0
+        cos < 0 -> 2
         else -> 1
     }
 }
@@ -169,4 +173,22 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
+    val b1: Int
+    val c1: Int
+    val d1: Int
+    if (a < c) {
+        b1 = b
+        c1 = c
+        d1 = d
+    } else {
+        b1 = d
+        c1 = a
+        d1 = b
+    }
+    return when {
+        b1 < c1 -> -1
+        b1 <= d1 -> b1 - c1
+        else -> d1 - c1
+    }
+}
