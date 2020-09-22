@@ -69,13 +69,11 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String {
-    return when {
-        (age % 100 > 4) and (age % 100 < 21) -> "$age лет"
-        age % 10 == 1 -> "$age год"
-        (age % 10 > 1) and (age % 10 < 5) -> "$age года"
-        else -> "$age лет"
-    }
+fun ageDescription(age: Int): String = when {
+    (age % 100 > 4) && (age % 100 < 21) -> "$age лет"
+    age % 10 == 1 -> "$age год"
+    (age % 10 > 1) && (age % 10 < 5) -> "$age года"
+    else -> "$age лет"
 }
 
 /**
@@ -113,9 +111,9 @@ fun whichRookThreatens(
     rookX2: Int, rookY2: Int
 ): Int {
     return when {
-        ((kingX == rookX1) or (kingY == rookY1)) and ((kingX == rookX2) or (kingY == rookY2)) -> 3
-        (kingX == rookX1) or (kingY == rookY1) -> 1
-        (kingX == rookX2) or (kingY == rookY2) -> 2
+        ((kingX == rookX1) || (kingY == rookY1)) && ((kingX == rookX2) || (kingY == rookY2)) -> 3
+        (kingX == rookX1) || (kingY == rookY1) -> 1
+        (kingX == rookX2) || (kingY == rookY2) -> 2
         else -> 0
     }
 }
@@ -135,13 +133,11 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int {
-    return when {
-        ((kingX == rookX) or (kingY == rookY)) and (abs(kingX - bishopX) == abs(kingY - bishopY)) -> 3
-        (kingX == rookX) or (kingY == rookY) -> 1
-        (abs(kingX - bishopX) == abs(kingY - bishopY)) -> 2
-        else -> 0
-    }
+): Int = when {
+    ((kingX == rookX) || (kingY == rookY)) && (abs(kingX - bishopX) == abs(kingY - bishopY)) -> 3
+    (kingX == rookX) || (kingY == rookY) -> 1
+    (abs(kingX - bishopX) == abs(kingY - bishopY)) -> 2
+    else -> 0
 }
 
 /**
@@ -158,7 +154,7 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     val med = a + b + c - max - min
     val cos = (min * min + med * med - max * max) / (2 * min * med)
     return when {
-        (cos > 1) or (cos < -1) -> -1
+        (cos > 1) || (cos < -1) -> -1
         cos > 0 -> 0
         cos < 0 -> 2
         else -> 1
