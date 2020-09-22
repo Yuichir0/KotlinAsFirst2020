@@ -30,7 +30,7 @@ fun isNumberHappy(number: Int): Boolean = (number / 1000 + number / 100 % 10) ==
  * Считать, что ферзи не могут загораживать друг друга.
  */
 fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
-    (x1 == x2) or (y1 == y2) or (abs(x1 - x2) == abs(y1 - y2))
+    (x1 == x2) || (y1 == y2) || (abs(x1 - x2) == abs(y1 - y2))
 
 
 /**
@@ -40,14 +40,14 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
 fun daysInMonth(month: Int, year: Int): Int {
-    return when {
-        (month == 2) && (year % 400 == 0) -> 29
-        (month == 2) && (year % 100 == 0) -> 28
-        (month == 2) && (year % 4 == 0) -> 29
-        (month == 2) -> 28
-        (month == 8) -> 31
-        (month == 9) -> 30
-        month % 2 == 1 -> 31
+    when {
+        (month == 2) && (year % 400 == 0) -> return 29
+        (month == 2) && (year % 100 == 0) -> return 28
+        (month == 2) && (year % 4 == 0) -> return 29
+        (month == 2) -> return 28
+    }
+    return when (month) {
+        1, 3, 5, 7, 8, 11 -> 31
         else -> 30
     }
 }
@@ -62,7 +62,7 @@ fun daysInMonth(month: Int, year: Int): Int {
 fun circleInside(
     x1: Double, y1: Double, r1: Double,
     x2: Double, y2: Double, r2: Double
-): Boolean = ((x2 - x1).pow(2) + (y2 - y1).pow(2) <= (r2 - r1).pow(2)) and (r2 - r1 >= 0)
+): Boolean = ((x2 - x1).pow(2) + (y2 - y1).pow(2) <= (r2 - r1).pow(2)) && (r2 - r1 >= 0)
 
 /**
  * Средняя (3 балла)
@@ -74,5 +74,5 @@ fun circleInside(
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean =
-    ((a <= r) and (b <= s)) or ((a <= r) and (c <= s)) or ((a <= s) and (b <= r)) or ((a <= s) and (c <= r)) or
-            ((b <= r) and (c <= s)) or ((b <= s) and (c <= r))
+    ((a <= r) && (b <= s)) || ((a <= r) && (c <= s)) || ((a <= s) && (b <= r)) || ((a <= s) && (c <= r)) ||
+            ((b <= r) && (c <= s)) || ((b <= s) && (c <= r))
