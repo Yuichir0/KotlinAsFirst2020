@@ -316,7 +316,7 @@ fun squareSequenceDigit(n: Int): Int {
             if (count == n) return lastdigit.toInt()
         }
     }
-    return 0
+    TODO()
 }
 
 /**
