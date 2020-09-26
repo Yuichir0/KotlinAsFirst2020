@@ -88,7 +88,7 @@ fun digitNumber(n: Int): Int {
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = if (n > 2) (fib(n - 1) + fib(n - 2)) else 1
+fun fib(n: Int): Double = if (n > 2) (fib(n - 1) + fib(n - 2)) else 1.0
 
 
 /**
@@ -298,24 +298,18 @@ fun cos(x: Double, eps: Double): Double {
 fun squareSequenceDigit(n: Int): Int {
     var count = 0
     var sqr: Double
-    var j = 0
-    var lastdigit: Double
     for (i in 1..n) {
         sqr = (i * i).toDouble()
         while (sqr > 0) {
             sqr = (sqr.toInt() / 10).toDouble()
-            j++
-        }
-        sqr = i * i * 10.0
-        while (sqr > 0) {
             count++
-            lastdigit = sqr / 10.0.pow(j)
-            sqr %= (10.0.pow(j)).toInt()
-            j--
-            if (count == n) return lastdigit.toInt()
+        }
+        sqr = (i * i).toDouble()
+        if (count >= n) {
+            return (sqr / 10.0.pow(count - n) % 10).toInt()
         }
     }
-    return 0
+    return -1
 }
 
 /**
@@ -329,23 +323,18 @@ fun squareSequenceDigit(n: Int): Int {
  */
 fun fibSequenceDigit(n: Int): Int {
     var count = 0
-    var sqr: Int
-    var j = 0
-    var lastdigit: Double
+    var sqr: Double
     for (i in 1..n) {
         sqr = fib(i)
         while (sqr > 0) {
-            sqr /= 10
-            j++
-        }
-        sqr = fib(i) * 10
-        while (sqr > 0) {
+            sqr = (sqr.toInt() / 10).toDouble()
             count++
-            lastdigit = sqr / 10.0.pow(j)
-            sqr %= (10.0.pow(j)).toInt()
-            j--
-            if (count == n) return lastdigit.toInt()
+        }
+        sqr = fib(i)
+        if (count >= n) {
+            return (sqr / 10.0.pow(count - n) % 10).toInt()
         }
     }
-    return 0
+    return -1
 }
+
