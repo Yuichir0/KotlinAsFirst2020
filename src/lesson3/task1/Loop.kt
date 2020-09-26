@@ -90,6 +90,7 @@ fun digitNumber(n: Int): Int {
  */
 fun fib(n: Int): Int = if (n > 2) (fib(n - 1) + fib(n - 2)) else 1
 
+
 /**
  * Простая (2 балла)
  *
@@ -253,8 +254,8 @@ fun sin(x: Double, eps: Double): Double {
     while (abs(check) >= abs(eps)) {
         if (switch % 2 == 0) ans += newX.pow(count) / factorial(count)
         else ans -= newX.pow(count) / factorial(count)
-        count += 2
         check = newX.pow(count) / factorial(count)
+        count += 2
         switch += 1
     }
     return 0.0
@@ -298,21 +299,20 @@ fun cos(x: Double, eps: Double): Double {
  */
 fun squareSequenceDigit(n: Int): Int {
     var count = 0
-    var sqr: Int
-    var test: Double
+    var sqr: Double
     var j = 0
     var lastdigit: Double
     for (i in 1..n) {
-        sqr = i * i
+        sqr = (i * i).toDouble()
         while (sqr > 0) {
-            sqr /= 10
+            sqr = (sqr.toInt() / 10).toDouble()
             j++
         }
-        test = i * i * 10.0
-        while (test > 0) {
+        sqr = i * i * 10.0
+        while (sqr > 0) {
             count++
-            lastdigit = test / 10.0.pow(j)
-            test %= (10.0.pow(j)).toInt()
+            lastdigit = sqr / 10.0.pow(j)
+            sqr %= (10.0.pow(j)).toInt()
             j--
             if (count == n) return lastdigit.toInt()
         }
