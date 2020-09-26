@@ -299,6 +299,7 @@ fun cos(x: Double, eps: Double): Double {
 fun squareSequenceDigit(n: Int): Int {
     var count = 0
     var sqr: Int
+    var test: Double
     var j = 0
     var lastdigit: Double
     for (i in 1..n) {
@@ -307,11 +308,11 @@ fun squareSequenceDigit(n: Int): Int {
             sqr /= 10
             j++
         }
-        sqr = i * i * 10
-        while (sqr > 0) {
+        test = i * i * 10.0
+        while (test > 0) {
             count++
-            lastdigit = sqr / (10.0).pow(j)
-            sqr %= ((10.0).pow(j)).toInt()
+            lastdigit = test / 10.0.pow(j)
+            test %= (10.0.pow(j)).toInt()
             j--
             if (count == n) return lastdigit.toInt()
         }
@@ -342,8 +343,8 @@ fun fibSequenceDigit(n: Int): Int {
         sqr = fib(i) * 10
         while (sqr > 0) {
             count++
-            lastdigit = sqr / (10.0).pow(j)
-            sqr %= ((10.0).pow(j)).toInt()
+            lastdigit = sqr / 10.0.pow(j)
+            sqr %= (10.0.pow(j)).toInt()
             j--
             if (count == n) return lastdigit.toInt()
         }
