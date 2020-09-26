@@ -247,18 +247,17 @@ fun sin(x: Double, eps: Double): Double {
     var ans = x
     var switch = 1
     var check = x.pow(count) / factorial(count)
-    while ((ans >= 2 * PI) || (ans <= -2 * PI))
+    while (abs(ans) >= 2 * PI)
         if (ans >= 2 * PI) ans -= 2 * PI
         else ans += 2 * PI
     val newX = ans
     while (abs(check) >= abs(eps)) {
-        if (switch % 2 == 0) ans += newX.pow(count) / factorial(count)
-        else ans -= newX.pow(count) / factorial(count)
+        ans += (-1.0).pow(switch) * newX.pow(count) / factorial(count)
         check = newX.pow(count) / factorial(count)
         count += 2
         switch += 1
     }
-    return 0.0
+    return ans
 }
 
 /**
@@ -276,11 +275,10 @@ fun cos(x: Double, eps: Double): Double {
     var newX = x
     var switch = 1
     var check = x.pow(count) / factorial(count)
-    while ((newX >= 2 * PI) || (newX <= -2 * PI))
+    while (abs(newX) >= 2 * PI)
         if (newX >= 2 * PI) newX -= 2 * PI else newX += 2 * PI
     while (abs(check) >= abs(eps)) {
-        if (switch % 2 == 0) ans += newX.pow(count) / factorial(count)
-        else ans -= newX.pow(count) / factorial(count)
+        ans += (-1.0).pow(switch) * newX.pow(count) / factorial(count)
         count += 2
         check = newX.pow(count) / factorial(count)
         switch += 1
