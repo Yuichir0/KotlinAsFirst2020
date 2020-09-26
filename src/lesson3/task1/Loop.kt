@@ -307,16 +307,16 @@ fun squareSequenceDigit(n: Int): Int {
             sqr /= 10
             j++
         }
-        sqr = i * i
+        sqr = i * i * 10
         while (sqr > 0) {
             count++
             lastdigit = sqr / (10.0).pow(j)
+            sqr %= ((10.0).pow(j)).toInt()
             j--
-            sqr /= 10
             if (count == n) return lastdigit.toInt()
         }
     }
-    TODO()
+    return 0
 }
 
 /**
@@ -328,4 +328,25 @@ fun squareSequenceDigit(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var count = 0
+    var sqr: Int
+    var j = 0
+    var lastdigit: Double
+    for (i in 1..n) {
+        sqr = fib(i)
+        while (sqr > 0) {
+            sqr /= 10
+            j++
+        }
+        sqr = fib(i) * 10
+        while (sqr > 0) {
+            count++
+            lastdigit = sqr / (10.0).pow(j)
+            sqr %= ((10.0).pow(j)).toInt()
+            j--
+            if (count == n) return lastdigit.toInt()
+        }
+    }
+    return 0
+}
