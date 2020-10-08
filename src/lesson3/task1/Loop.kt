@@ -88,7 +88,16 @@ fun digitNumber(n: Int): Int {
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Double = if (n > 2) (fib(n - 1) + fib(n - 2)) else 1.0
+//fun fib(n: Int): Double = if (n > 2) (fib(n - 1) + fib(n - 2)) else 1.0
+fun fib(n: Int): Int {
+    var first = 1
+    var second = 0
+    for (i in 2..n) {
+        if (first >= second) second += first
+        else first += second
+    }
+    return max(first, second)
+}
 
 
 /**
@@ -97,9 +106,9 @@ fun fib(n: Int): Double = if (n > 2) (fib(n - 1) + fib(n - 2)) else 1.0
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    for (i in 2..n)
+    for (i in 2..sqrt(n.toDouble()).toInt())
         if (n % i == 0) return i
-    return 0
+    return n
 }
 
 /**
@@ -108,9 +117,9 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    for (i in n - 1 downTo 1)
+    for (i in n - 1 downTo sqrt(n.toDouble()).toInt())
         if (n % i == 0) return i
-    return 0
+    return 1
 }
 
 /**
@@ -146,7 +155,7 @@ fun collatzSteps(x: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    for (i in 1..n * m)
+    for (i in max(n, m)..n * m)
         if ((i % n == 0) && (i % m == 0)) return i
     return 0
 }
@@ -159,7 +168,7 @@ fun lcm(m: Int, n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    for (i in 2..max(n, m))
+    for (i in 2..min(n, m))
         if ((n % i == 0) && (m % i == 0)) return false
     return true
 }
@@ -239,9 +248,7 @@ fun sin(x: Double, eps: Double): Double {
     var ans = x
     var switch = 1
     var check = x.pow(count) / factorial(count)
-    while (abs(ans) >= 2 * PI)
-        if (ans >= 2 * PI) ans -= 2 * PI
-        else ans += 2 * PI
+    ans %= 2 * PI
     val newX = ans
     while (abs(check) >= abs(eps)) {
         ans += (-1.0).pow(switch) * newX.pow(count) / factorial(count)
@@ -267,8 +274,7 @@ fun cos(x: Double, eps: Double): Double {
     var newX = x
     var switch = 1
     var check = x.pow(count) / factorial(count)
-    while (abs(newX) >= 2 * PI)
-        if (newX >= 2 * PI) newX -= 2 * PI else newX += 2 * PI
+    newX %= 2 * PI
     while (abs(check) >= abs(eps)) {
         ans += (-1.0).pow(switch) * newX.pow(count) / factorial(count)
         count += 2
@@ -317,12 +323,12 @@ fun fibSequenceDigit(n: Int): Int {
     var count = 0
     var sqr: Double
     for (i in 1..n) {
-        sqr = fib(i)
+        sqr = fib(i).toDouble()
         while (sqr > 0) {
             sqr = (sqr.toInt() / 10).toDouble()
             count++
         }
-        sqr = fib(i)
+        sqr = fib(i).toDouble()
         if (count >= n) {
             return (sqr / 10.0.pow(count - n) % 10).toInt()
         }
