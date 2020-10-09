@@ -155,9 +155,13 @@ fun collatzSteps(x: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    for (i in max(n, m)..n * m)
-        if ((i % n == 0) && (i % m == 0)) return i
-    return 0
+    var xm = m
+    var xn = n
+    while (xm != xn) {
+        if (xm > xn) xm -= xn
+        else xn -= xm
+    }
+    return n * m / xn
 }
 
 /**
@@ -181,8 +185,8 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    for (i in 0..sqrt(max(n, m).toDouble()).toInt())
-        if ((i * i >= min(n, m)) && (i * i <= max(n, m))) return true
+    for (i in sqrt(m.toDouble()).toInt()..sqrt(n.toDouble()).toInt())
+        if ((i * i >= m) && (i * i <= n)) return true
     return false
 }
 
@@ -245,14 +249,11 @@ fun hasDifferentDigits(n: Int): Boolean {
  */
 fun sin(x: Double, eps: Double): Double {
     var count = 3
-    var ans = x
     var switch = 1
-    var check = x.pow(count) / factorial(count)
-    ans %= 2 * PI
+    var ans = x % (2 * PI)
     val newX = ans
-    while (abs(check) >= abs(eps)) {
+    while (abs(newX.pow(count) / factorial(count)) >= abs(eps)) {
         ans += (-1.0).pow(switch) * newX.pow(count) / factorial(count)
-        check = newX.pow(count) / factorial(count)
         count += 2
         switch += 1
     }
@@ -271,14 +272,11 @@ fun sin(x: Double, eps: Double): Double {
 fun cos(x: Double, eps: Double): Double {
     var count = 2
     var ans = 1.0
-    var newX = x
     var switch = 1
-    var check = x.pow(count) / factorial(count)
-    newX %= 2 * PI
-    while (abs(check) >= abs(eps)) {
+    val newX = x % (2 * PI)
+    while (abs(newX.pow(count) / factorial(count)) >= abs(eps)) {
         ans += (-1.0).pow(switch) * newX.pow(count) / factorial(count)
         count += 2
-        check = newX.pow(count) / factorial(count)
         switch += 1
     }
     return ans
