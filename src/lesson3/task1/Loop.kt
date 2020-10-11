@@ -252,9 +252,11 @@ fun sin(x: Double, eps: Double): Double {
     var switch = 1
     var ans = x % (2 * PI)
     val newX = ans
+    var check = newX.pow(count) / factorial(count)
     while (abs(newX.pow(count) / factorial(count)) >= abs(eps)) {
-        ans += (-1.0).pow(switch) * newX.pow(count) / factorial(count)
+        ans += (-1.0).pow(switch) * check
         count += 2
+        check *= newX.pow(2) / (count * (count - 1))
         switch += 1
     }
     return ans
@@ -274,9 +276,11 @@ fun cos(x: Double, eps: Double): Double {
     var ans = 1.0
     var switch = 1
     val newX = x % (2 * PI)
+    var check = newX.pow(count) / factorial(count)
     while (abs(newX.pow(count) / factorial(count)) >= abs(eps)) {
-        ans += (-1.0).pow(switch) * newX.pow(count) / factorial(count)
+        ans += (-1.0).pow(switch) * check
         count += 2
+        check *= newX.pow(2) / (count * (count - 1))
         switch += 1
     }
     return ans
