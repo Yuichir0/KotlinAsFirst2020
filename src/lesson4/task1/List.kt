@@ -230,6 +230,7 @@ fun convert(n: Int, base: Int): List<Int> {
     var numb = n
     val list = mutableListOf<Int>()
     val newList = mutableListOf<Int>()
+    if (numb == 0) newList.add(0)
     while (numb > 0) {
         list.add(numb % base)
         newList.add(1)
