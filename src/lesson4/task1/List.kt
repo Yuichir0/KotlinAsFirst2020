@@ -3,6 +3,8 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson3.task1.digitNumber
+import java.lang.StringBuilder
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -129,7 +131,7 @@ fun abs(v: List<Double>): Double = sqrt(v.fold(0.0) { previousResult, element ->
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
 fun mean(list: List<Double>): Double =
-    if (list.isNotEmpty()) list.fold(0.0) { previousResult, element -> previousResult + element } / list.size
+    if (list.isNotEmpty()) list.sum() / list.size
     else 0.0
 
 /**
@@ -229,15 +231,11 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*
 fun convert(n: Int, base: Int): List<Int> {
     var numb = n
     val list = mutableListOf<Int>()
-    val newList = mutableListOf<Int>()
-    if (numb == 0) newList.add(0)
     while (numb > 0) {
         list.add(numb % base)
-        newList.add(1)
         numb /= base
     }
-    for (i in 0 until list.size) newList[i] = list[list.size - i - 1]
-    return newList
+    return list.reversed()
 }
 
 /**
@@ -285,61 +283,28 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
+    val list = listOf('I', 'V', 'X', 'L', 'C', 'D', 'M')
     var number = n
-    var ans = String()
-    while (number - 1000 >= 0) {
-        ans += "M"
-        number -= 1000
+    val ans = StringBuilder()
+    var length = digitNumber(number)
+    var firstDigit: Int
+    while (length > 0) {
+        firstDigit = number / 10.0.pow(length - 1.0).toInt()
+        number %= 10.0.pow(length - 1.0).toInt()
+        when (firstDigit) {
+            1 -> ans.append(list[length * 2 - 2])
+            2 -> ans.append(list[length * 2 - 2], list[length * 2 - 2])
+            3 -> ans.append(list[length * 2 - 2], list[length * 2 - 2], list[length * 2 - 2])
+            4 -> ans.append(list[length * 2 - 2], list[length * 2 - 1])
+            5 -> ans.append(list[length * 2 - 1])
+            6 -> ans.append(list[length * 2 - 1], list[length * 2 - 2])
+            7 -> ans.append(list[length * 2 - 1], list[length * 2 - 2], list[length * 2 - 2])
+            8 -> ans.append(list[length * 2 - 1], list[length * 2 - 2], list[length * 2 - 2], list[length * 2 - 2])
+            9 -> ans.append(list[length * 2 - 2], list[length * 2])
+        }
+        length--
     }
-    if (number - 900 >= 0) {
-        ans += "CM"
-        number -= 900
-    }
-    if (number - 500 >= 0) {
-        ans += "D"
-        number -= 500
-    }
-    if (number - 400 >= 0) {
-        ans += "CD"
-        number -= 400
-    }
-    while (number - 100 >= 0) {
-        ans += "C"
-        number -= 100
-    }
-    if (number - 90 >= 0) {
-        ans += "XC"
-        number -= 90
-    }
-    if (number - 50 >= 0) {
-        ans += "L"
-        number -= 50
-    }
-    if (number - 40 >= 0) {
-        ans += "XL"
-        number -= 40
-    }
-    while (number - 10 >= 0) {
-        ans += "X"
-        number -= 10
-    }
-    if (number - 9 >= 0) {
-        ans += "IX"
-        number -= 9
-    }
-    if (number - 5 >= 0) {
-        ans += "V"
-        number -= 5
-    }
-    if (number - 4 >= 0) {
-        ans += "IV"
-        number -= 4
-    }
-    while (number - 1 >= 0) {
-        ans += "I"
-        number -= 1
-    }
-    return ans
+    return ans.toString()
 }
 
 /**
@@ -350,20 +315,20 @@ fun roman(n: Int): String {
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 fun russian(n: Int): String {
-    var ans = String()
+    val ans = StringBuilder()
     var number = n
     var k = 0
     if (number / 100000 > 0) {
         when (number / 100000) {
-            1 -> ans += "сто "
-            2 -> ans += "двести "
-            3 -> ans += "триста "
-            4 -> ans += "четыреста "
-            5 -> ans += "пятьсот "
-            6 -> ans += "шестьсот "
-            7 -> ans += "семьсот "
-            8 -> ans += "восемьсот "
-            9 -> ans += "девятьсот "
+            1 -> ans.append("сто ")
+            2 -> ans.append("двести ")
+            3 -> ans.append("триста ")
+            4 -> ans.append("четыреста ")
+            5 -> ans.append("пятьсот ")
+            6 -> ans.append("шестьсот ")
+            7 -> ans.append("семьсот ")
+            8 -> ans.append("восемьсот ")
+            9 -> ans.append("девятьсот ")
         }
         number %= 100000
         k--
@@ -372,69 +337,69 @@ fun russian(n: Int): String {
         when (number / 10000) {
             1 -> {
                 when (number / 1000) {
-                    11 -> ans += "одиннадцать "
-                    12 -> ans += "двенадцать "
-                    13 -> ans += "тринадцать "
-                    14 -> ans += "четырнадцать "
-                    15 -> ans += "пятнадцать "
-                    16 -> ans += "шестнадцать "
-                    17 -> ans += "семнадцать "
-                    18 -> ans += "восемнадцать "
-                    19 -> ans += "девятнадцать "
+                    11 -> ans.append("одиннадцать ")
+                    12 -> ans.append("двенадцать ")
+                    13 -> ans.append("тринадцать ")
+                    14 -> ans.append("четырнадцать ")
+                    15 -> ans.append("пятнадцать ")
+                    16 -> ans.append("шестнадцать ")
+                    17 -> ans.append("семнадцать ")
+                    18 -> ans.append("восемнадцать ")
+                    19 -> ans.append("девятнадцать ")
                 }
                 number %= 1000
                 k--
             }
-            2 -> ans += "двадцать "
-            3 -> ans += "тридцать "
-            4 -> ans += "сорок "
-            5 -> ans += "пятьдесят "
-            6 -> ans += "шестьдесят "
-            7 -> ans += "семьдесят "
-            8 -> ans += "восемьдесят "
-            9 -> ans += "девяносто "
+            2 -> ans.append("двадцать ")
+            3 -> ans.append("тридцать ")
+            4 -> ans.append("сорок ")
+            5 -> ans.append("пятьдесят ")
+            6 -> ans.append("шестьдесят ")
+            7 -> ans.append("семьдесят ")
+            8 -> ans.append("восемьдесят ")
+            9 -> ans.append("девяносто ")
         }
         number %= 10000
     }
     if (number / 1000 > 0) {
         when (number / 1000) {
             1 -> {
-                ans += "одна тысяча "
+                ans.append("одна тысяча ")
                 k = 1
             }
             2 -> {
-                ans += "две тысячи "
+                ans.append("две тысячи ")
                 k = 1
             }
             3 -> {
-                ans += "три тысячи "
+                ans.append("три тысячи ")
                 k = 1
             }
             4 -> {
-                ans += "четыре тысячи "
+                ans.append("четыре тысячи ")
                 k = 1
             }
-            5 -> ans += "пять "
-            6 -> ans += "шесть "
-            7 -> ans += "семь "
-            8 -> ans += "восемь "
-            9 -> ans += "девять "
+            5 -> ans.append("пять ")
+            6 -> ans.append("шесть ")
+            7 -> ans.append("семь ")
+            8 -> ans.append("восемь ")
+            9 -> ans.append("девять ")
         }
         number %= 1000
         k--
     }
-    if (k < 0) ans += "тысяч "
+    if (k < 0) ans.append("тысяч ")
     if (number / 100 > 0) {
         when (number / 100) {
-            1 -> ans += "сто "
-            2 -> ans += "двести "
-            3 -> ans += "триста "
-            4 -> ans += "четыреста "
-            5 -> ans += "пятьсот "
-            6 -> ans += "шестьсот "
-            7 -> ans += "семьсот "
-            8 -> ans += "восемьсот "
-            9 -> ans += "девятьсот "
+            1 -> ans.append("сто ")
+            2 -> ans.append("двести ")
+            3 -> ans.append("триста ")
+            4 -> ans.append("четыреста ")
+            5 -> ans.append("пятьсот ")
+            6 -> ans.append("шестьсот ")
+            7 -> ans.append("семьсот ")
+            8 -> ans.append("восемьсот ")
+            9 -> ans.append("девятьсот ")
         }
         number %= 100
     }
@@ -442,39 +407,39 @@ fun russian(n: Int): String {
         when (number / 10) {
             1 -> {
                 when (number) {
-                    11 -> ans += "одиннадцать"
-                    12 -> ans += "двенадцать"
-                    13 -> ans += "тринадцать"
-                    14 -> ans += "четырнадцать"
-                    15 -> ans += "пятнадцать"
-                    16 -> ans += "шестнадцать"
-                    17 -> ans += "семнадцать"
-                    18 -> ans += "восемнадцать"
-                    19 -> ans += "девятнадцать"
+                    11 -> ans.append("одиннадцать")
+                    12 -> ans.append("двенадцать")
+                    13 -> ans.append("тринадцать")
+                    14 -> ans.append("четырнадцать")
+                    15 -> ans.append("пятнадцать")
+                    16 -> ans.append("шестнадцать")
+                    17 -> ans.append("семнадцать")
+                    18 -> ans.append("восемнадцать")
+                    19 -> ans.append("девятнадцать")
                 }
                 number = 0
             }
-            2 -> ans += "двадцать "
-            3 -> ans += "тридцать "
-            4 -> ans += "сорок "
-            5 -> ans += "пятьдесят "
-            6 -> ans += "шестьдесят "
-            7 -> ans += "семьдесят "
-            8 -> ans += "восемьдесят "
-            9 -> ans += "девяносто "
+            2 -> ans.append("двадцать ")
+            3 -> ans.append("тридцать ")
+            4 -> ans.append("сорок ")
+            5 -> ans.append("пятьдесят ")
+            6 -> ans.append("шестьдесят ")
+            7 -> ans.append("семьдесят ")
+            8 -> ans.append("восемьдесят ")
+            9 -> ans.append("девяносто ")
         }
         number %= 10
     }
     if (number > 0) when (number) {
-        1 -> ans += "один"
-        2 -> ans += "два"
-        3 -> ans += "три"
-        4 -> ans += "четыре"
-        5 -> ans += "пять"
-        6 -> ans += "шесть"
-        7 -> ans += "семь"
-        8 -> ans += "восемь"
-        9 -> ans += "девять"
+        1 -> ans.append("один")
+        2 -> ans.append("два")
+        3 -> ans.append("три")
+        4 -> ans.append("четыре")
+        5 -> ans.append("пять")
+        6 -> ans.append("шесть")
+        7 -> ans.append("семь")
+        8 -> ans.append("восемь")
+        9 -> ans.append("девять")
     }
-    return ans.trim()
+    return ans.toString().trim()
 }
