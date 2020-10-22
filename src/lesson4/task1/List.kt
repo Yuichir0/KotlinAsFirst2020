@@ -360,6 +360,7 @@ fun russian(n: Int): String {
             9 -> ans.append("девяносто ")
         }
         number %= 10000
+        k--
     }
     if (number / 1000 > 0) {
         when (number / 1000) {
