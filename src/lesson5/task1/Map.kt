@@ -143,10 +143,7 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
-    var ans = mutableListOf<String>()
-
-}
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.toSet().intersect(b.toSet()).toList()
 
 /**
  * Средняя (3 балла)
@@ -165,7 +162,11 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
-fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
+    val ans = mapA.toMutableMap()
+    for ((key, value) in mapB) if ((key in ans) and (value != ans[key])) ans[key] += ", $value" else ans[key] = value
+    return ans
+}
 
 /**
  * Средняя (4 балла)
@@ -177,7 +178,21 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    val ans = mutableMapOf<String, Double>()
+    val count = mutableMapOf<String, Double>()
+    for ((key, value) in stockPrices) {
+        if (ans[key] != null) {
+            ans[key] = ans[key]!! + value
+            count[key] = count[key]!! + 1
+        } else {
+            ans[key] = value
+            count[key] = 1.0
+        }
+    }
+    for ((key, value) in ans) ans[key] = value / count[key]!!
+    return ans
+}
 
 /**
  * Средняя (4 балла)
