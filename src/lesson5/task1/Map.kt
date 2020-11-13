@@ -320,6 +320,12 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
                 while (mas[j] != list[a2]) {
                     a2++
                 }
+                if (a1 == a2) {
+                    a2++
+                    while (mas[j] != list[a2]) {
+                        a2++
+                    }
+                }
                 return Pair(a1, a2)
             }
             if (mas[i] + mas[j] < number) i++
