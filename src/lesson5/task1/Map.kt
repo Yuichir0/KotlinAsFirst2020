@@ -310,8 +310,18 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
         val mas = list.sorted()
         var i = 0
         var j = mas.size - 1
+        var a1 = 0
+        var a2 = 0
         while (i != j) {
-            if (mas[i] + mas[j] == number) return Pair(i, j)
+            if (mas[i] + mas[j] == number) {
+                while (mas[i] != list[a1]) {
+                    a1++
+                }
+                while (mas[j] != list[a2]) {
+                    a2++
+                }
+                return Pair(a1, a2)
+            }
             if (mas[i] + mas[j] < number) i++
             if (mas[i] + mas[j] > number) j--
         }
