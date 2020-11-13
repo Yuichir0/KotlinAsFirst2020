@@ -337,6 +337,7 @@ fun russian(n: Int): String {
         when (number / 10000) {
             1 -> {
                 when (number / 1000) {
+                    10 -> ans.append("Десять")
                     11 -> ans.append("одиннадцать ")
                     12 -> ans.append("двенадцать ")
                     13 -> ans.append("тринадцать ")
@@ -408,6 +409,7 @@ fun russian(n: Int): String {
         when (number / 10) {
             1 -> {
                 when (number) {
+                    10 -> ans.append("Десять")
                     11 -> ans.append("одиннадцать")
                     12 -> ans.append("двенадцать")
                     13 -> ans.append("тринадцать")
