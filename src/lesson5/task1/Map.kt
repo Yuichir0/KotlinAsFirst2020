@@ -312,24 +312,23 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
         var j = mas.size - 1
         var a1 = 0
         var a2 = 0
+        var switch: Int
         while (i != j) {
+            switch = 0
             if (mas[i] + mas[j] == number) {
-                while (mas[i] != list[a1]) {
-                    a1++
-                }
-                while (mas[j] != list[a2]) {
-                    a2++
-                }
+                while (mas[i] != list[a1]) a1++
+                while (mas[j] != list[a2]) a2++
                 if (a1 == a2) {
                     a2++
-                    while (mas[j] != list[a2]) {
-                        a2++
-                    }
+                    while (mas[j] != list[a2]) a2++
                 }
                 return Pair(a1, a2)
             }
-            if (mas[i] + mas[j] < number) i++
-            if (mas[i] + mas[j] > number) j--
+            if (mas[i] + mas[j] < number) {
+                i++
+                switch++
+            }
+            if ((mas[i] + mas[j] > number) and (switch != 1)) j--
         }
     }
     return Pair(-1, -1)
