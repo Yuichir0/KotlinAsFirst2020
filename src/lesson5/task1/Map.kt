@@ -118,7 +118,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
-    for ((key, value) in a) if ((key !in b) || (b[key] != value)) return false
+    for ((key, value) in a) if (key !in b || b[key] != value) return false
     return true
 }
 
@@ -137,7 +137,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *     -> a changes to mutableMapOf() aka becomes empty
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
-    for ((key, value) in b) if ((key in a) && (value == a[key])) a.remove(key)
+    for ((key, value) in b) if (key in a && value == a[key]) a.remove(key)
 }
 
 /**
@@ -168,7 +168,7 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.toSet().int
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
     val ans = mapA.toMutableMap()
-    for ((key, value) in mapB) if ((key in ans) && (value != ans[key])) ans[key] += ", $value" else ans[key] = value
+    for ((key, value) in mapB) if (key in ans && value != ans[key]) ans[key] += ", $value" else ans[key] = value
     return ans
 }
 
@@ -305,35 +305,11 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     val ans = mutableMapOf<Int, Int>()
     for ((i, j) in list.withIndex()) {
-        if (ans.containsKey(number - j)) return Pair(min(i, ans[number - j]!!), max(i, ans[number - j]!!))
+        if ((number - j) in ans) return Pair(min(i, ans[number - j]!!), max(i, ans[number - j]!!))
         else ans[j] = i
     }
     return Pair(-1, -1)
 }
-//    val mas = list.sorted()
-//    var i = 0
-//    var j = mas.size - 1
-//    var a1 = 0
-//    var a2 = 0
-//    var switch: Int
-//    while (i != j) {
-//        switch = 0
-//        if (mas[i] + mas[j] == number) {
-//            while (mas[i] != list[a1]) a1++
-//            while (mas[j] != list[a2]) a2++
-//            if (a1 == a2) {
-//                a2++
-//                while (mas[j] != list[a2]) a2++
-//            }
-//            return Pair(a1, a2)
-//        }
-//        if (mas[i] + mas[j] < number) {
-//            i++
-//            switch++
-//        }
-//        if ((mas[i] + mas[j] > number) and (switch != 1)) j--
-//    }
-//}
 
 /**
  * Очень сложная (8 баллов)
