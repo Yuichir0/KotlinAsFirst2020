@@ -3,6 +3,8 @@
 package lesson5.task1
 
 import javax.print.attribute.IntegerSyntax
+import kotlin.math.max
+import kotlin.math.min
 
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
@@ -100,8 +102,9 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val ans = mutableMapOf<Int, MutableList<String>>()
-    for ((student, mark) in grades)
+    for ((student, mark) in grades) {
         if (ans[mark] != null) ans[mark]!! += student else ans[mark] = mutableListOf(student)
+    }
     return ans
 }
 
@@ -116,7 +119,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
-    for ((key, value) in a) if ((key !in b) or (key in b) and (value != b[key])) return false
+    for ((key, value) in a) if ((key !in b) || (b[key] != value)) return false
     return true
 }
 
@@ -135,7 +138,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *     -> a changes to mutableMapOf() aka becomes empty
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
-    for ((key, value) in b) if ((key in a) and (value == a[key])) a.remove(key)
+    for ((key, value) in b) if ((key in a) && (value == a[key])) a.remove(key)
 }
 
 /**
@@ -166,7 +169,7 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.toSet().int
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
     val ans = mapA.toMutableMap()
-    for ((key, value) in mapB) if ((key in ans) and (value != ans[key])) ans[key] += ", $value" else ans[key] = value
+    for ((key, value) in mapB) if ((key in ans) && (value != ans[key])) ans[key] += ", $value" else ans[key] = value
     return ans
 }
 
@@ -184,13 +187,8 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
     val ans = mutableMapOf<String, Double>()
     val count = mutableMapOf<String, Double>()
     for ((key, value) in stockPrices) {
-        if (ans[key] != null) {
-            ans[key] = ans[key]!! + value
-            count[key] = count[key]!! + 1
-        } else {
-            ans[key] = value
-            count[key] = 1.0
-        }
+        ans[key] = (ans[key] ?: 0.0) + value
+        count[key] = (count[key] ?: 0.0) + 1.0
     }
     for ((key, value) in ans) ans[key] = value / count[key]!!
     return ans
@@ -306,33 +304,37 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    if (list.isNotEmpty()) {
-        val mas = list.sorted()
-        var i = 0
-        var j = mas.size - 1
-        var a1 = 0
-        var a2 = 0
-        var switch: Int
-        while (i != j) {
-            switch = 0
-            if (mas[i] + mas[j] == number) {
-                while (mas[i] != list[a1]) a1++
-                while (mas[j] != list[a2]) a2++
-                if (a1 == a2) {
-                    a2++
-                    while (mas[j] != list[a2]) a2++
-                }
-                return Pair(a1, a2)
-            }
-            if (mas[i] + mas[j] < number) {
-                i++
-                switch++
-            }
-            if ((mas[i] + mas[j] > number) and (switch != 1)) j--
-        }
+    val ans = mutableMapOf<Int, Int>()
+    for ((i, j) in list.withIndex()) {
+        if (ans.containsValue(number - j)) return Pair(min(i, ans[number - j]!!), max(i, ans[number - j]!!))
+        else ans[j] = i
     }
     return Pair(-1, -1)
 }
+//    val mas = list.sorted()
+//    var i = 0
+//    var j = mas.size - 1
+//    var a1 = 0
+//    var a2 = 0
+//    var switch: Int
+//    while (i != j) {
+//        switch = 0
+//        if (mas[i] + mas[j] == number) {
+//            while (mas[i] != list[a1]) a1++
+//            while (mas[j] != list[a2]) a2++
+//            if (a1 == a2) {
+//                a2++
+//                while (mas[j] != list[a2]) a2++
+//            }
+//            return Pair(a1, a2)
+//        }
+//        if (mas[i] + mas[j] < number) {
+//            i++
+//            switch++
+//        }
+//        if ((mas[i] + mas[j] > number) and (switch != 1)) j--
+//    }
+//}
 
 /**
  * Очень сложная (8 баллов)
