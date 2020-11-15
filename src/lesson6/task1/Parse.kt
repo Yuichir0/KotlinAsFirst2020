@@ -200,17 +200,21 @@ fun fromRoman(roman: String): Int {
     val allRoman = mapOf("I" to 1, "V" to 5, "X" to 10, "L" to 50, "C" to 100, "D" to 500, "M" to 1000)
     var ans = 0
     var switch = 0
-    val parts = roman.chunked(1)
-    var lastPart = allRoman[parts[0]] ?: return -1
-    for (part in parts) {
-        if (switch > 0) {
-            if (lastPart < allRoman[part] ?: (return -1)) ans -= lastPart
-            else ans += lastPart
+    try {
+        val parts = roman.chunked(1)
+        var lastPart = allRoman[parts[0]]!!
+        for (part in parts) {
+            if (switch > 0) {
+                if (lastPart < allRoman[part]!!) ans -= lastPart
+                else ans += lastPart
+            }
+            switch = 1
+            lastPart = allRoman[part]!!
         }
-        switch = 1
-        lastPart = allRoman[part] ?: return -1
+        ans += lastPart
+    } catch (e: Exception) {
+        return -1
     }
-    ans += lastPart
     return ans
 }
 
