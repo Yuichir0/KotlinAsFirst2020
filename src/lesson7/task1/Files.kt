@@ -108,15 +108,14 @@ fun sibilants(inputName: String, outputName: String) {
     for (line in File(inputName).readLines()) {
         val parts = line.chunked(1)
         for (part in parts) {
-            if (previousChar == "/" && part == "n") {
-                writer.newLine()
-                continue
-            }
             if (switch == 1) writer.write(previousChar)
-            previousChar = part
-            if (previousChar in exceptions) previousChar = change[part] ?: ""
+            previousChar = if (previousChar in exceptions) change[part] ?: part
+            else part
             switch = 1
         }
+        writer.write(previousChar)
+        switch = 0
+        writer.newLine()
     }
     writer.close()
 }
