@@ -103,7 +103,7 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val ans = mutableMapOf<Int, MutableList<String>>()
     for ((student, mark) in grades) ans[mark] =
-        (ans.getOrDefault(mark, MutableList(0) { "" }) + student) as MutableList<String>
+        (ans.getOrPut(mark, { MutableList(0) { "" } }) + student) as MutableList<String>
     return ans
 }
 
@@ -147,7 +147,8 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.toSet().intersect(b.toSet()).toList()
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> =
+    a.toSet().intersect(b.toSet()).toList()
 
 /**
  * Средняя (3 балла)
@@ -168,7 +169,8 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.toSet().int
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
     val ans = mapA.toMutableMap()
-    for ((key, value) in mapB) if (key in ans && value != ans[key]) ans[key] += ", $value" else ans[key] = value
+    for ((key, value) in mapB)
+        if (key in ans && value != ans[key]) ans[key] += ", $value" else ans[key] = value
     return ans
 }
 
@@ -305,7 +307,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     val ans = mutableMapOf<Int, Int>()
     for ((i, j) in list.withIndex()) {
-        if ((number - j) in ans) return Pair(min(i, ans[number - j]!!), max(i, ans[number - j]!!))
+        if (number - j in ans) return Pair(min(i, ans[number - j]!!), max(i, ans[number - j]!!))
         else ans[j] = i
     }
     return Pair(-1, -1)
