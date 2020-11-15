@@ -102,8 +102,7 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val ans = mutableMapOf<Int, MutableList<String>>()
-    for ((student, mark) in grades) ans[mark] =
-        (ans.getOrPut(mark, { MutableList(0) { "" } }) + student) as MutableList<String>
+    for ((student, mark) in grades) ans.getOrPut(mark) { MutableList(0) { "" } }.add(student)
     return ans
 }
 
