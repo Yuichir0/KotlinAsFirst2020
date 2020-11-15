@@ -202,14 +202,14 @@ fun fromRoman(roman: String): Int {
     var switch = 0
     try {
         val parts = roman.chunked(1)
-        var lastPart = allRoman[parts[0]]!!
+        var lastPart = allRoman[parts[0]] ?: return -1
         for (part in parts) {
             if (switch > 0) {
-                if (lastPart < allRoman[part]!!) ans -= lastPart
+                if (lastPart < allRoman[part] ?: (return -1)) ans -= lastPart
                 else ans += lastPart
             }
             switch = 1
-            lastPart = allRoman[part]!!
+            lastPart = allRoman[part] ?: return -1
         }
         ans += lastPart
     } catch (e: Exception) {
