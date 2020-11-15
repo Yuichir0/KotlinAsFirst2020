@@ -114,6 +114,7 @@ fun sibilants(inputName: String, outputName: String) {
             switch = 1
         }
         writer.write(previousChar)
+        previousChar = "0"
         switch = 0
         writer.newLine()
     }
