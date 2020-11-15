@@ -2,6 +2,9 @@
 
 package lesson6.task1
 
+import java.lang.NumberFormatException
+import kotlin.math.exp
+
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -127,7 +130,25 @@ fun bestLongJump(jumps: String): Int = TODO()
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    var switch = 0
+    var ans = -1
+    var lastResult = -1
+    val parts = jumps.split(" ")
+    try {
+        for (part in parts)
+            if (switch == 0) {
+                lastResult = part.toInt()
+                switch = 1
+            } else {
+                if ('+' in part && ans < lastResult) ans = lastResult
+                switch = 0
+            }
+    } catch (e: NumberFormatException) {
+        return -1
+    }
+    return ans
+}
 
 /**
  * Сложная (6 баллов)
@@ -175,7 +196,23 @@ fun mostExpensive(description: String): String = TODO()
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    val allRoman = mapOf("I" to 1, "V" to 5, "X" to 10, "L" to 50, "C" to 100, "D" to 500, "M" to 1000)
+    var ans = 0
+    var switch = 0
+    val parts = roman.chunked(1)
+    var lastPart = allRoman[parts[0]] ?: return -1
+    for (part in parts) {
+        if (switch > 0) {
+            if (lastPart < allRoman[part] ?: (return -1)) ans -= lastPart
+            else ans += lastPart
+        }
+        switch = 1
+        lastPart = allRoman[part] ?: return -1
+    }
+    ans += lastPart
+    return ans
+}
 
 /**
  * Очень сложная (7 баллов)
