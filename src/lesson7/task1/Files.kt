@@ -65,11 +65,11 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
 fun deleteMarked(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     for (line in File(inputName).readLines()) {
-        if (line.isNotEmpty() && line.first() != '_') {
+        if (line.isEmpty()) writer.newLine()
+        else if (line.first() != '_') {
             writer.write(line)
             writer.newLine()
         }
-        if (line.isEmpty()) writer.newLine()
     }
     writer.close()
 }
@@ -103,9 +103,9 @@ fun sibilants(inputName: String, outputName: String) {
     val change = mapOf("Ы" to "И", "Я" to "А", "Ю" to "У", "ы" to "и", "я" to "а", "ю" to "у")
     val exceptions = listOf("Ж", "Ч", "Ш", "Щ", "ж", "ч", "ш", "щ")
     val writer = File(outputName).bufferedWriter()
-    var previousChar = "0"
-    var switch = 0
     for (line in File(inputName).readLines()) {
+        var previousChar = "0"
+        var switch = 0
         val parts = line.chunked(1)
         for (part in parts) {
             if (switch == 1) writer.write(previousChar)
@@ -114,8 +114,6 @@ fun sibilants(inputName: String, outputName: String) {
             switch = 1
         }
         writer.write(previousChar)
-        previousChar = "0"
-        switch = 0
         writer.newLine()
     }
     writer.close()
