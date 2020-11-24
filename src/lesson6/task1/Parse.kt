@@ -131,22 +131,17 @@ fun bestLongJump(jumps: String): Int = TODO()
  * вернуть -1.
  */
 fun bestHighJump(jumps: String): Int {
-    var switch = false
     var ans = -1
-    var lastResult = -1
-    val parts = jumps.split(" ")
-    for (part in parts)
-        if (!switch) {
-            try {
-                lastResult = part.toInt()
-            } catch (e: NumberFormatException) {
-                return -1
-            }
-            switch = true
-        } else {
-            if ('+' in part && ans < lastResult) ans = lastResult
-            switch = false
+    var lastResult: Int
+    val part = jumps.split(" ")
+    for (i in part.indices step 2) {
+        try {
+            lastResult = part[i].toInt()
+        } catch (e: NumberFormatException) {
+            return -1
         }
+        if ('+' in part[i + 1] && ans < lastResult) ans = lastResult
+    }
     return ans
 }
 
@@ -201,20 +196,17 @@ fun fromRoman(roman: String): Int {
     var ans = 0
     var switch = false
     val parts = roman.chunked(1)
-    try {
-        var lastPart = allRoman[parts[0]] ?: return -1
-        for (part in parts) {
-            if (switch) {
-                if (lastPart < allRoman[part] ?: (return -1)) ans -= lastPart
-                else ans += lastPart
-            }
-            switch = true
-            lastPart = allRoman[part] ?: return -1
+    if (parts.isEmpty()) return -1
+    var lastPart = allRoman[parts[0]] ?: return -1
+    for (part in parts) {
+        if (switch) {
+            if (lastPart < allRoman[part] ?: (return -1)) ans -= lastPart
+            else ans += lastPart
         }
-        ans += lastPart
-    } catch (e: Exception) {
-        return -1
+        switch = true
+        lastPart = allRoman[part] ?: return -1
     }
+    ans += lastPart
     return ans
 }
 
