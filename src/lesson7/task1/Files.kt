@@ -307,83 +307,102 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
-    var i = true
-    var b = true
-    var s = true
-    var check1 = false
-    var check2 = false
-    var switch = true
     writer.write("<html>")
     writer.write("<body>")
     writer.write("<p>")
     for (line in File(inputName).readLines()) {
+        var i = true
+        var b = true
+        var s = true
+        var check1 = false //Проверка для *
+        var check2 = false //Проверка для **
+        var check3 = false //Проверка второго ~
+        var check4: Boolean //Проверка для ***
+        var switch: Boolean
         val parts = line.chunked(1)
-        for (part in parts) {
-            if (part == "~")
-                if (s) {
-                    writer.write("<s>")
-                    s = false
-                    switch = false
-                } else {
-                    writer.write("</s>")
-                    s = true
+        if (line.isEmpty()) writer.write("</p>")
+        else
+            for (part in parts) {
+                switch = true
+                check4 = true
+                if (part == "*" && check1 && check2)
+                    if (b && i) {
+                        writer.write("<b><i>")
+                        switch = false
+                        check1 = false
+                        check2 = false
+                        check4 = false
+                    } else if (b) {
+                        writer.write("<b></i>")
+                        switch = false
+                        check1 = false
+                        check2 = false
+                        check4 = false
+                    } else if (i) {
+                        writer.write("</b><i>")
+                        switch = false
+                        check1 = false
+                        check2 = false
+                        check4 = false
+                    } else {
+                        writer.write("</b></i>")
+                        switch = false
+                        check1 = false
+                        check2 = false
+                        check4 = false
+                    }
+                if (part != "*" && check1 && check2)
+                    if (b) {
+                        writer.write("<b>")
+                        b = false
+                        check1 = false
+                        check2 = false
+                    } else {
+                        writer.write("</b>")
+                        b = true
+                        check1 = false
+                        check2 = false
+                    }
+                if (part != "*" && check1)
+                    if (i) {
+                        writer.write("<i>")
+                        i = false
+                        check1 = false
+                    } else {
+                        writer.write("</i>")
+                        i = true
+                        check1 = false
+                    }
+                if (part == "~" && check3)
+                    if (s) {
+                        writer.write("<s>")
+                        s = false
+                        check3 = false
+                        switch = false
+                    } else {
+                        writer.write("</s>")
+                        s = true
+                        check3 = false
+                        switch = false
+                    }
+                if (part == "*" && check4) {
+                    check2 = check1
+                    check1 = true
                     switch = false
                 }
-            if (part == "*" && check1 && check2)
-                if (b && i) {
-                    writer.write("<b><i>")
+                if (part == "~") {
+                    check3 = true
                     switch = false
-                    check1 = false
-                    check2 = false
-                } else if (b) {
-                    writer.write("<b></i>")
-                    switch = false
-                    check1 = false
-                    check2 = false
-                } else if (i) {
-                    writer.write("</b><i>")
-                    switch = false
-                    check1 = false
-                    check2 = false
-                } else {
-                    writer.write("</b></i>")
-                    switch = false
-                    check1 = false
-                    check2 = false
                 }
-            if (part != "*" && check1 && check2)
-                if (b) {
-                    writer.write("<b>")
-                    b = false
-                    check1 = false
-                    check2 = false
-                } else {
-                    writer.write("</b>")
-                    b = true
-                    check1 = false
-                    check2 = false
-                }
-            if (part != "*" && check1)
-                if (i) {
-                    writer.write("<i>")
-                    i = false
-                    check1 = false
-                } else {
-                    writer.write("</i>")
-                    i = true
-                    check1 = false
-                }
-            if (part == "*") {
-                check2 = check1
-                check1 = true
-                switch = false
+                if (part != "~") check3 = false
+                if (switch) writer.write(part)
             }
-            if (switch) writer.write(part)
-        }
+        if (line.isEmpty()) writer.write("<p>")
     }
     writer.write("</p>")
     writer.write("</body>")
     writer.write("</html>")
+    writer.close()
 }
 //val writer = File(outputName).bufferedWriter()
 //for (line in File(inputName).readLines()) {
