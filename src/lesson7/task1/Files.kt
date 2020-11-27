@@ -306,8 +306,100 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter()
+    var i = true
+    var b = true
+    var s = true
+    var check1 = false
+    var check2 = false
+    var switch = true
+    writer.write("<html>")
+    writer.write("<body>")
+    writer.write("<p>")
+    for (line in File(inputName).readLines()) {
+        val parts = line.chunked(1)
+        for (part in parts) {
+            if (part == "~")
+                if (s) {
+                    writer.write("<s>")
+                    s = false
+                    switch = false
+                } else {
+                    writer.write("</s>")
+                    s = true
+                    switch = false
+                }
+            if (part == "*" && check1 && check2)
+                if (b && i) {
+                    writer.write("<b><i>")
+                    switch = false
+                    check1 = false
+                    check2 = false
+                } else if (b) {
+                    writer.write("<b></i>")
+                    switch = false
+                    check1 = false
+                    check2 = false
+                } else if (i) {
+                    writer.write("</b><i>")
+                    switch = false
+                    check1 = false
+                    check2 = false
+                } else {
+                    writer.write("</b></i>")
+                    switch = false
+                    check1 = false
+                    check2 = false
+                }
+            if (part != "*" && check1 && check2)
+                if (b) {
+                    writer.write("<b>")
+                    b = false
+                    check1 = false
+                    check2 = false
+                } else {
+                    writer.write("</b>")
+                    b = true
+                    check1 = false
+                    check2 = false
+                }
+            if (part != "*" && check1)
+                if (i) {
+                    writer.write("<i>")
+                    i = false
+                    check1 = false
+                } else {
+                    writer.write("</i>")
+                    i = true
+                    check1 = false
+                }
+            if (part == "*") {
+                check2 = check1
+                check1 = true
+                switch = false
+            }
+            if (switch) writer.write(part)
+        }
+    }
+    writer.write("</p>")
+    writer.write("</body>")
+    writer.write("</html>")
 }
+//val writer = File(outputName).bufferedWriter()
+//for (line in File(inputName).readLines()) {
+//    var previousChar = "0"
+//    var switch = 0
+//    val parts = line.chunked(1)
+//    for (part in parts) {
+//        if (switch == 1) writer.write(previousChar)
+//        previousChar = if (previousChar in exceptions) change[part] ?: part
+//        else part
+//        switch = 1
+//    }
+//    writer.write(previousChar)
+//    writer.newLine()
+//}
+//writer.close()
 
 /**
  * Сложная (23 балла)
