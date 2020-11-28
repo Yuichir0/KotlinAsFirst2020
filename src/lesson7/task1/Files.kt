@@ -644,6 +644,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                 writer.print(space)
             } else {
                 number = 0
+                i = 0
                 while (number <= currentDivision) {
                     number = rhv * i
                     i++
