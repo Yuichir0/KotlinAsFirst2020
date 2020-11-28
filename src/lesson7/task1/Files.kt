@@ -609,6 +609,11 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     }
     if (numberLength != currentDivisionLength) secondSpace.setLength(secondSpace.length - 1)
     val answer = lhv / rhv
+    var hour = lhv
+    if (answer == 0 && lhv >= 100) while (hour >= 100) {
+        hour /= 10
+        secondSpace.setLength(secondSpace.length - 1)
+    }
     writer.println("$space-$number$secondSpace$answer")
     writer.print(space)
     i = -1
