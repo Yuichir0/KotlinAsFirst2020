@@ -667,5 +667,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     }
     currentDivision -= number
     if (lhv % 10 == 0) space.append(" ")
+    if (answer == 0) space.setLength(space.length - space.length)
+    if (lhv < 10) space.append(" ")
     writer.print("$space$currentDivision")
 }
