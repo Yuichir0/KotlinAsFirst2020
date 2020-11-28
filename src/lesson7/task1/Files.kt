@@ -317,12 +317,12 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var i = true
     var b = true
     var s = true
+    var check1 = false
+    var check2 = false
+    var check3 = false
+    var check4: Boolean
+    var switch: Boolean
     for (line in File(inputName).readLines()) {
-        var check1 = false
-        var check2 = false
-        var check3 = false
-        var check4: Boolean
-        var switch: Boolean
         val parts = line.chunked(1)
         if (line.isEmpty()) writer.write("</p>")
         else
@@ -636,6 +636,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             writer.println("$space-$number")
             writer.print(space)
         } else {
+            number = 0
             while (number <= currentDivision) {
                 number = rhv * i
                 i++
