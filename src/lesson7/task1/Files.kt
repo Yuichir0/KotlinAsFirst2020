@@ -2,7 +2,11 @@
 
 package lesson7.task1
 
+import lesson3.task1.digitNumber
 import java.io.File
+import java.io.PrintStream
+import java.lang.StringBuilder
+import kotlin.math.pow
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -404,21 +408,6 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     writer.write("</html>")
     writer.close()
 }
-//val writer = File(outputName).bufferedWriter()
-//for (line in File(inputName).readLines()) {
-//    var previousChar = "0"
-//    var switch = 0
-//    val parts = line.chunked(1)
-//    for (part in parts) {
-//        if (switch == 1) writer.write(previousChar)
-//        previousChar = if (previousChar in exceptions) change[part] ?: part
-//        else part
-//        switch = 1
-//    }
-//    writer.write(previousChar)
-//    writer.newLine()
-//}
-//writer.close()
 
 /**
  * Сложная (23 балла)
@@ -584,6 +573,97 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+    val writer = PrintStream(outputName)
+    var dividend = lhv
+    val length = digitNumber(dividend)
+    var i = 0
+    var currentDivision = 0
+    var number = 0
+    val space = StringBuilder(" ")
+    writer.println("$space$lhv | $rhv")
+    while (currentDivision < rhv && currentDivision < lhv) {
+        currentDivision = (lhv / 10.0.pow(length - i)).toInt()
+        i++
+    }
+    i = 0
+    while (number <= currentDivision) {
+        number = rhv * i
+        i++
+    }
+    number -= rhv
+    val numberLength = digitNumber(number)
+    val currentDivisionLength = digitNumber(currentDivision)
+    val extraSpaceAmount = currentDivisionLength - numberLength - 1
+    if (extraSpaceAmount == -1) space.setLength(space.length - 1)
+    for (j in 0..extraSpaceAmount) {
+        space.append(" ")
+    }
+    val secondSpaceLength = length - numberLength + 3
+    val secondSpace = StringBuilder()
+    for (j in 1..secondSpaceLength) {
+        secondSpace.append(" ")
+    }
+    val answer = lhv / rhv
+    writer.println("$space-$number$secondSpace$answer")
+    writer.print(space)
+    i = -1
+    for (j in 0..numberLength) {
+        writer.print("-")
+        i++
+    }
+    writer.println()
+    for (j in 1..i) {
+        space.append(" ")
+    }
+    dividend = lhv % 10.0.pow(length - currentDivisionLength).toInt()
+    var slash: Int
+    while (dividend > 0) {
+        currentDivision -= number
+        i = digitNumber(dividend) - 1
+        currentDivision = currentDivision * 10 + dividend / 10.0.pow(i).toInt()
+        dividend %= 10.0.pow(i).toInt()
+        if (currentDivision < 10) {
+            writer.print(space)
+            writer.println("0$currentDivision")
+            space.append(" ")
+        } else writer.println("$space$currentDivision")
+        if (currentDivision < rhv) {
+            number = 0
+            slash = 1
+            writer.println("$space-$number")
+            writer.print(space)
+        } else {
+            while (number <= currentDivision) {
+                number = rhv * i
+                i++
+            }
+            number -= rhv
+            space.setLength(space.length - 1)
+            slash = digitNumber(number)
+            writer.println("$space-$number")
+            writer.print(space)
+            space.append(" ")
+        }
+        for (j in 0..slash) {
+            writer.print("-")
+        }
+        writer.println()
+        for (j in 1..slash - digitNumber(currentDivision - number)) {
+            space.append(" ")
+        }
+    }
+    currentDivision -= number
+    writer.print("$space$currentDivision")
 }
 
+//fun deleteMarked(inputName: String, outputName: String) {
+//    val writer = File(outputName).bufferedWriter()
+//    for (line in File(inputName).readLines()) {
+//        if (line.isEmpty()) writer.newLine()
+//        else if (line.first() != '_') {
+//            writer.write(line)
+//            writer.newLine()
+//        }
+//    }
+//    writer.close()
+//}
