@@ -655,15 +655,3 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     currentDivision -= number
     writer.print("$space$currentDivision")
 }
-
-//fun deleteMarked(inputName: String, outputName: String) {
-//    val writer = File(outputName).bufferedWriter()
-//    for (line in File(inputName).readLines()) {
-//        if (line.isEmpty()) writer.newLine()
-//        else if (line.first() != '_') {
-//            writer.write(line)
-//            writer.newLine()
-//        }
-//    }
-//    writer.close()
-//}
