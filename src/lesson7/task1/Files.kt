@@ -314,10 +314,10 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     writer.write("<html>")
     writer.write("<body>")
     writer.write("<p>")
+    var i = true
+    var b = true
+    var s = true
     for (line in File(inputName).readLines()) {
-        var i = true
-        var b = true
-        var s = true
         var check1 = false
         var check2 = false
         var check3 = false
@@ -580,7 +580,6 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     var currentDivision = 0
     var number = 0
     val space = StringBuilder(" ")
-    writer.println("$space$lhv | $rhv")
     while (currentDivision < rhv && currentDivision < lhv) {
         currentDivision = (lhv / 10.0.pow(length - i)).toInt()
         i++
@@ -593,16 +592,20 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     number -= rhv
     val numberLength = digitNumber(number)
     val currentDivisionLength = digitNumber(currentDivision)
+    if (numberLength != currentDivisionLength) space.setLength(space.length - 1)
+    writer.println("$space$lhv | $rhv")
     val extraSpaceAmount = currentDivisionLength - numberLength - 1
-    if (extraSpaceAmount == -1) space.setLength(space.length - 1)
     for (j in 0..extraSpaceAmount) {
         space.append(" ")
     }
+    if (numberLength != currentDivisionLength) space.setLength(space.length - 1)
+    if (extraSpaceAmount == -1) space.setLength(space.length - 1)
     val secondSpaceLength = length - numberLength + 3
     val secondSpace = StringBuilder()
     for (j in 1..secondSpaceLength) {
         secondSpace.append(" ")
     }
+    if (numberLength != currentDivisionLength) secondSpace.setLength(secondSpace.length - 1)
     val answer = lhv / rhv
     writer.println("$space-$number$secondSpace$answer")
     writer.print(space)
