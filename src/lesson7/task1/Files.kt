@@ -577,10 +577,13 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     var dividend = lhv
     val length = digitNumber(dividend)
     var i = 0
+    var checker: Boolean
     var currentDivision = 0
     var number = 0
     var switch = false
     var skip = false
+    var firstLength = 1
+    var secondLength = 1
     val space = StringBuilder(" ")
     while (currentDivision < rhv && currentDivision < lhv) {
         currentDivision = (lhv / 10.0.pow(length - i)).toInt()
@@ -627,13 +630,20 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     }
     dividend = lhv % 10.0.pow(length - currentDivisionLength).toInt()
     var slash: Int
-    for (j in 0 until digitNumber(dividend)) {
+    for (j in 1..length - currentDivisionLength) {
         switch = false
-        if (digitNumber(lhv) != 1 && answer > 9) {
+        checker = false
+        if (length != 1 && answer > 9) {
             currentDivision -= number
             i = digitNumber(dividend) - 1
             currentDivision = currentDivision * 10 + dividend / 10.0.pow(i).toInt()
-            dividend %= 10.0.pow(i).toInt()
+            if (firstLength - secondLength > 1) {
+                currentDivision -= dividend / 10.0.pow(i).toInt()
+                checker = true
+            }
+            firstLength = digitNumber(dividend)
+            if (!checker) dividend %= 10.0.pow(i).toInt()
+            secondLength = digitNumber(dividend)
             if (skip) space.append(" ")
             if (currentDivision < 10) {
                 writer.print(space)
