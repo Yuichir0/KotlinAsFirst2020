@@ -318,10 +318,10 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         var i = true
         var b = true
         var s = true
-        var check1 = false //Проверка для *
-        var check2 = false //Проверка для **
-        var check3 = false //Проверка второго ~
-        var check4: Boolean //Проверка для ***
+        var check1 = false
+        var check2 = false
+        var check3 = false
+        var check4: Boolean
         var switch: Boolean
         val parts = line.chunked(1)
         if (line.isEmpty()) writer.write("</p>")
