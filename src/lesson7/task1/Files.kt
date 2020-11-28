@@ -580,7 +580,6 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     var currentDivision = 0
     var number = 0
     var skip = false
-    var zero = 1
     val space = StringBuilder(" ")
     while (currentDivision < rhv && currentDivision < lhv) {
         currentDivision = (lhv / 10.0.pow(length - i)).toInt()
@@ -620,54 +619,49 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     for (j in 1..i) {
         space.append(" ")
     }
-    var test = 100
-    while (lhv % test == 0) {
-        zero++
-        test *= 10
-    }
-    if (digitNumber(lhv) == 1) zero = 0
     dividend = lhv % 10.0.pow(length - currentDivisionLength).toInt()
     var slash: Int
-    while (digitNumber(dividend) - 1 > 0 || zero > 0) {
-        if (digitNumber(dividend) - 1 == 0) zero--
-        currentDivision -= number
-        i = digitNumber(dividend) - 1
-        currentDivision = currentDivision * 10 + dividend / 10.0.pow(i).toInt()
-        dividend %= 10.0.pow(i).toInt()
-        if (skip) space.append(" ")
-        if (currentDivision < 10) {
-            writer.print(space)
-            writer.println("0$currentDivision")
-            space.append(" ")
-        } else writer.println("$space$currentDivision")
-        if (currentDivision < rhv) {
-            number = 0
-            slash = 1
-            if (lhv % 10 == 0) {
+    for (j in 0 until digitNumber(dividend)) {
+        if (digitNumber(lhv) != 1 && answer > 9) {
+            currentDivision -= number
+            i = digitNumber(dividend) - 1
+            currentDivision = currentDivision * 10 + dividend / 10.0.pow(i).toInt()
+            dividend %= 10.0.pow(i).toInt()
+            if (skip) space.append(" ")
+            if (currentDivision < 10) {
+                writer.print(space)
+                writer.println("0$currentDivision")
+                space.append(" ")
+            } else writer.println("$space$currentDivision")
+            if (currentDivision < rhv) {
+                number = 0
+                slash = 1
+                if (lhv % 10 == 0) {
+                    space.setLength(space.length - 1)
+                    skip = true
+                }
+                writer.println("$space-$number")
+                writer.print(space)
+            } else {
+                number = 0
+                while (number <= currentDivision) {
+                    number = rhv * i
+                    i++
+                }
+                number -= rhv
                 space.setLength(space.length - 1)
-                skip = true
+                slash = digitNumber(number)
+                writer.println("$space-$number")
+                writer.print(space)
+                space.append(" ")
             }
-            writer.println("$space-$number")
-            writer.print(space)
-        } else {
-            number = 0
-            while (number <= currentDivision) {
-                number = rhv * i
-                i++
+            for (k in 0..slash) {
+                writer.print("-")
             }
-            number -= rhv
-            space.setLength(space.length - 1)
-            slash = digitNumber(number)
-            writer.println("$space-$number")
-            writer.print(space)
-            space.append(" ")
-        }
-        for (j in 0..slash) {
-            writer.print("-")
-        }
-        writer.println()
-        for (j in 1..slash - digitNumber(currentDivision - number)) {
-            space.append(" ")
+            writer.println()
+            for (k in 1..slash - digitNumber(currentDivision - number)) {
+                space.append(" ")
+            }
         }
     }
     currentDivision -= number
