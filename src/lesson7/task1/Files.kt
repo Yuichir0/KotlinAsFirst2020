@@ -410,7 +410,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                     check1 = true
                     switch = false
                 } else {
-                    if (check2) if (b) {
+                    if (check1) if (b) {
                         writer.write("<b>")
                         b = false
                         check1 = false
