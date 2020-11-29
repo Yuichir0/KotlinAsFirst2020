@@ -415,20 +415,24 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                         b = false
                         check1 = false
                         check2 = false
+                        switch = false
                     } else {
                         writer.write("</b>")
                         b = true
                         check1 = false
                         check2 = false
+                        switch = false
                     }
                     else if (i) {
                         writer.write("<i>")
                         i = false
                         check1 = false
+                        switch = false
                     } else {
                         writer.write("</i>")
                         i = true
                         check1 = false
+                        switch = false
                     }
                 }
                 if (part != "~" && check3) {
