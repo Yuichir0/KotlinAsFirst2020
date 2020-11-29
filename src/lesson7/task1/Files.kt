@@ -590,6 +590,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             val extraSpace = StringBuilder("   ")
             for (j in 1..length - minuendLength) extraSpace.append(" ")
             if (minuendLength == subtrahendLength) space.setLength(space.length - 1)
+            for (j in 1 until minuendLength - subtrahendLength) space.append(" ")
             writer.println("$space-$subtrahend$extraSpace$answer")
             firstTimeSwitch = false
         } else {
