@@ -573,118 +573,50 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    val writer = PrintStream(outputName)
-    var dividend = lhv
-    val length = digitNumber(dividend)
-    var i = 0
-    var checker: Boolean
-    var currentDivision = 0
-    var number = 0
-    var switch = false
-    var skip = false
-    var firstLength = 1
-    var secondLength = 1
-    val space = StringBuilder(" ")
-    while (currentDivision < rhv && currentDivision < lhv) {
-        currentDivision = (lhv / 10.0.pow(length - i)).toInt()
-        i++
-    }
-    i = 0
-    while (number <= currentDivision) {
-        number = rhv * i
-        i++
-    }
-    number -= rhv
-    val numberLength = digitNumber(number)
-    val currentDivisionLength = digitNumber(currentDivision)
-    if (numberLength != currentDivisionLength) space.setLength(space.length - 1)
-    writer.println("$space$lhv | $rhv")
-    val extraSpaceAmount = currentDivisionLength - numberLength - 1
-    for (j in 0..extraSpaceAmount) {
-        space.append(" ")
-    }
-    if (numberLength != currentDivisionLength) space.setLength(space.length - 1)
-    if (extraSpaceAmount == -1) space.setLength(space.length - 1)
-    val secondSpaceLength = length - numberLength + 3
-    val secondSpace = StringBuilder()
-    for (j in 1..secondSpaceLength) {
-        secondSpace.append(" ")
-    }
-    if (numberLength != currentDivisionLength) secondSpace.setLength(secondSpace.length - 1)
     val answer = lhv / rhv
-    var hour = lhv
-    if (answer == 0 && lhv >= 100) while (hour >= 100) {
-        hour /= 10
-        secondSpace.setLength(secondSpace.length - 1)
-    }
-    writer.println("$space-$number$secondSpace$answer")
-    writer.print(space)
-    i = -1
-    for (j in 0..numberLength) {
-        writer.print("-")
-        i++
-    }
-    writer.println()
-    for (j in 1..i) {
-        space.append(" ")
-    }
-    dividend = lhv % 10.0.pow(length - currentDivisionLength).toInt()
-    var slash: Int
-    for (j in 1..length - currentDivisionLength) {
-        switch = false
-        checker = false
-        if (length != 1 && answer > 9) {
-            currentDivision -= number
-            i = digitNumber(dividend) - 1
-            currentDivision = currentDivision * 10 + dividend / 10.0.pow(i).toInt()
-            if (firstLength - secondLength > 1) {
-                currentDivision -= dividend / 10.0.pow(i).toInt()
-                checker = true
-            }
-            firstLength = digitNumber(dividend)
-            if (!checker) dividend %= 10.0.pow(i).toInt()
-            secondLength = digitNumber(dividend)
-            if (skip) space.append(" ")
-            if (currentDivision < 10) {
-                writer.print(space)
-                writer.println("0$currentDivision")
+    val answerLength = digitNumber(answer)
+    val space = StringBuilder(" ")
+    val length = digitNumber(lhv)
+    var firstTimeSwitch = true
+    val writer = PrintStream(outputName)
+    var minuend = lhv / 10.0.pow(answerLength - 1).toInt()
+    for (i in 1..answerLength) {
+        var minuendLength = digitNumber(minuend)
+        val subtrahend = answer / 10.0.pow(answerLength - i).toInt() % 10 * rhv
+        val subtrahendLength = digitNumber(subtrahend)
+        if (firstTimeSwitch) {
+            if (minuendLength != subtrahendLength) space.setLength(space.length - 1)
+            writer.println("$space$lhv | $rhv")
+            val extraSpace = StringBuilder("   ")
+            for (j in 1..length - minuendLength) extraSpace.append(" ")
+            if (minuendLength == subtrahendLength) space.setLength(space.length - 1)
+            writer.println("$space-$subtrahend$extraSpace$answer")
+            firstTimeSwitch = false
+        } else {
+            if (minuend < 10) {
+                writer.println("0$minuend")
                 space.append(" ")
-            } else writer.println("$space$currentDivision")
-            if (currentDivision < rhv) {
-                number = 0
-                slash = 1
-                if (lhv % 10 == 0) skip = true
-                if (currentDivision < 10) {
-                    space.setLength(space.length - 1)
-                    switch = true
-                }
-                writer.println("$space-$number")
-                writer.print(space)
-            } else {
-                number = 0
-                i = 0
-                while (number <= currentDivision) {
-                    number = rhv * i
-                    i++
-                }
-                number -= rhv
-                space.setLength(space.length - 1)
-                slash = digitNumber(number)
-                writer.println("$space-$number")
-                writer.print(space)
-                space.append(" ")
-            }
-            for (k in 0..slash) {
-                writer.print("-")
-            }
-            writer.println()
-            for (k in 1..slash - digitNumber(currentDivision - number)) {
-                space.append(" ")
-            }
+            } else writer.println(minuend)
+            space.setLength(space.length - 1)
+            for (j in 1..minuendLength - subtrahendLength) space.append(" ")
+            writer.println("$space-$subtrahend")
         }
+        writer.print(space)
+        for (j in 1..subtrahendLength) {
+            writer.print("-")
+            space.append(" ")
+        }
+        writer.println("-")
+        minuend = if (answerLength != i)
+            (minuend - subtrahend) * 10 + (lhv / 10.0.pow(answerLength - i - 1).toInt() % 10)
+        else (minuend - subtrahend) * 10 + lhv % 10
+        minuendLength = digitNumber(minuend)
+        while (minuendLength > 2) {
+            minuendLength--
+            space.setLength(space.length - 1)
+        }
+        writer.print(space)
     }
-    currentDivision -= number
-    if (answer == 0 && lhv > 9) space.setLength(space.length - space.length)
-    if (switch) space.append(" ")
-    writer.print("$space$currentDivision")
+    minuend /= 10
+    writer.print(minuend)
 }
