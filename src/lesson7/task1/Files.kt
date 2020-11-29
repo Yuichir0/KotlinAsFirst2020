@@ -321,12 +321,14 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var check2 = false
     var check3 = false
     var check4: Boolean
+    var check5 = true
     var switch: Boolean
     for (line in File(inputName).readLines()) {
         val parts = line.chunked(1)
-        if (line.isEmpty()) writer.write("</p>")
+        if (line.isEmpty() && check5) writer.write("</p>")
         else
             for (part in parts) {
+                check5 = true
                 switch = true
                 check4 = true
                 if (part == "*" && check1 && check2)
@@ -401,7 +403,10 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 if (part != "~") check3 = false
                 if (switch) writer.write(part)
             }
-        if (line.isEmpty()) writer.write("<p>")
+        if (line.isEmpty() && check5) {
+            writer.write("<p>")
+            check5 = false
+        }
     }
     writer.write("</p>")
     writer.write("</body>")
