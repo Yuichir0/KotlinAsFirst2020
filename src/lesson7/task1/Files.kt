@@ -321,7 +321,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var check2 = false
     var check3 = false
     var check4: Boolean
-    var check5 = true
+    var check5 = false
     var switch: Boolean
     for (line in File(inputName).readLines()) {
         val parts = line.chunked(1)
