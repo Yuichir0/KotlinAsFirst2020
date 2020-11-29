@@ -327,7 +327,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     for (line in File(inputName).readLines()) {
         var j = -1
         val parts = line.chunked(1)
-        if ((line.isEmpty() || line == "/t" || line == "/s") && check5) writer.write("</p>")
+        if ((line.isEmpty() || line == "/t" || line == "/s" || line == " ") && check5) writer.write("</p>")
         else
             for (part in parts) {
                 j++
@@ -445,7 +445,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 }
                 if (switch) writer.write(part)
             }
-        if ((line.isEmpty() || line == "/t" || line == "/s") && check5) {
+        if ((line.isEmpty() || line == "/t" || line == "/s" || line == " ") && check5) {
             writer.write("<p>")
             check5 = false
         }
