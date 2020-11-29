@@ -336,24 +336,32 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 if (part == "*" && check1 && check2)
                     if (b && i) {
                         writer.write("<b><i>")
+                        b = false
+                        i = false
                         switch = false
                         check1 = false
                         check2 = false
                         check4 = false
                     } else if (b) {
                         writer.write("<b></i>")
+                        b = false
+                        i = true
                         switch = false
                         check1 = false
                         check2 = false
                         check4 = false
                     } else if (i) {
                         writer.write("</b><i>")
+                        b = true
+                        i = false
                         switch = false
                         check1 = false
                         check2 = false
                         check4 = false
                     } else {
                         writer.write("</b></i>")
+                        b = true
+                        i = true
                         switch = false
                         check1 = false
                         check2 = false
