@@ -601,8 +601,9 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             for (j in 1..minuendLength - subtrahendLength) space.append(" ")
             writer.println("$space-$subtrahend")
         }
+        for (j in 1 until minuendLength - subtrahendLength) space.setLength(space.length - 1)
         writer.print(space)
-        for (j in 1..subtrahendLength) {
+        for (j in 1..maxOf(subtrahendLength, minuendLength - 1)) {
             writer.print("-")
             space.append(" ")
         }
