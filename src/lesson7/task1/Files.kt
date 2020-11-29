@@ -326,7 +326,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var switch: Boolean
     for (line in File(inputName).readLines()) {
         var j = -1
-        val parts = line.chunked(1)
+        val parts = line.replace(Regex("\n\t\n"), "\n\n").chunked(1)
         if ((line.isEmpty() || line == "/t" || line == "/t/n" || line == " ") && check5) writer.write("</p>")
         else
             for (part in parts) {
