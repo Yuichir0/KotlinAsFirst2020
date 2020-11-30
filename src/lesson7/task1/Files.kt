@@ -322,132 +322,136 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var check3 = false
     var check4: Boolean
     var check5 = false
+    var check6 = false
     var switch2: Boolean
     var switch: Boolean
     for (line in File(inputName).readLines()) {
+        if (line.replace(Regex("""\s*|\t*"""), "").isEmpty() && check6) {
+            check5 = true
+            continue
+        }
+        if (line.replace(Regex("""\s*|\t*"""), "").isEmpty()) continue
+        if (check5 && check6) {
+            writer.write("</p><p>")
+            check5 = false
+        }
         var j = -1
-        val parts = line.replace(Regex("\n\t\n"), "\n\n").chunked(1)
-        if ((line.isEmpty() || line == "/t" || line == "/t/n" || line == " ") && check5) writer.write("</p>")
-        else
-            for (part in parts) {
-                j++
-                switch2 = false
-                check5 = true
-                switch = true
-                check4 = true
-                if (part == "*" && check1 && check2)
-                    if (b && i) {
-                        writer.write("<b><i>")
-                        b = false
-                        i = false
-                        switch = false
-                        check1 = false
-                        check2 = false
-                        check4 = false
-                    } else if (b) {
-                        writer.write("<b></i>")
-                        b = false
-                        i = true
-                        switch = false
-                        check1 = false
-                        check2 = false
-                        check4 = false
-                    } else if (i) {
-                        writer.write("</b><i>")
-                        b = true
-                        i = false
-                        switch = false
-                        check1 = false
-                        check2 = false
-                        check4 = false
-                    } else {
-                        writer.write("</b></i>")
-                        b = true
-                        i = true
-                        switch = false
-                        check1 = false
-                        check2 = false
-                        check4 = false
-                    }
-                if (part != "*" && check1 && check2)
-                    if (b) {
-                        writer.write("<b>")
-                        b = false
-                        check1 = false
-                        check2 = false
-                    } else {
-                        writer.write("</b>")
-                        b = true
-                        check1 = false
-                        check2 = false
-                    }
-                if (part != "*" && check1)
-                    if (i) {
-                        writer.write("<i>")
-                        i = false
-                        check1 = false
-                    } else {
-                        writer.write("</i>")
-                        i = true
-                        check1 = false
-                    }
-                if (part == "~" && check3)
-                    if (s) {
-                        writer.write("<s>")
-                        s = false
-                        check3 = false
-                        switch = false
-                        switch2 = true
-                    } else {
-                        writer.write("</s>")
-                        s = true
-                        check3 = false
-                        switch = false
-                        switch2 = true
-                    }
-                if (part == "*" && check4) if (j != parts.lastIndex) {
-                    check2 = check1
-                    check1 = true
+        val parts = line.chunked(1)
+        for (part in parts) {
+            j++
+            switch2 = false
+            switch = true
+            check4 = true
+            check6 = true
+            if (part == "*" && check1 && check2)
+                if (b && i) {
+                    writer.write("<b><i>")
+                    b = false
+                    i = false
+                    switch = false
+                    check1 = false
+                    check2 = false
+                    check4 = false
+                } else if (b) {
+                    writer.write("<b></i>")
+                    b = false
+                    i = true
+                    switch = false
+                    check1 = false
+                    check2 = false
+                    check4 = false
+                } else if (i) {
+                    writer.write("</b><i>")
+                    b = true
+                    i = false
+                    switch = false
+                    check1 = false
+                    check2 = false
+                    check4 = false
+                } else {
+                    writer.write("</b></i>")
+                    b = true
+                    i = true
+                    switch = false
+                    check1 = false
+                    check2 = false
+                    check4 = false
+                }
+            if (part != "*" && check1 && check2)
+                if (b) {
+                    writer.write("<b>")
+                    b = false
+                    check1 = false
+                    check2 = false
+                } else {
+                    writer.write("</b>")
+                    b = true
+                    check1 = false
+                    check2 = false
+                }
+            if (part != "*" && check1)
+                if (i) {
+                    writer.write("<i>")
+                    i = false
+                    check1 = false
+                } else {
+                    writer.write("</i>")
+                    i = true
+                    check1 = false
+                }
+            if (part == "~" && check3)
+                if (s) {
+                    writer.write("<s>")
+                    s = false
+                    check3 = false
+                    switch = false
+                    switch2 = true
+                } else {
+                    writer.write("</s>")
+                    s = true
+                    check3 = false
+                    switch = false
+                    switch2 = true
+                }
+            if (part == "*" && check4) if (j != parts.lastIndex) {
+                check2 = check1
+                check1 = true
+                switch = false
+            } else {
+                if (check1) if (b) {
+                    writer.write("<b>")
+                    b = false
+                    check1 = false
+                    check2 = false
                     switch = false
                 } else {
-                    if (check1) if (b) {
-                        writer.write("<b>")
-                        b = false
-                        check1 = false
-                        check2 = false
-                        switch = false
-                    } else {
-                        writer.write("</b>")
-                        b = true
-                        check1 = false
-                        check2 = false
-                        switch = false
-                    }
-                    else if (i) {
-                        writer.write("<i>")
-                        i = false
-                        check1 = false
-                        switch = false
-                    } else {
-                        writer.write("</i>")
-                        i = true
-                        check1 = false
-                        switch = false
-                    }
-                }
-                if (part != "~" && check3) {
-                    check3 = false
-                    writer.write("~")
-                }
-                if (part == "~" && !switch2) if (j != parts.lastIndex) {
-                    check3 = true
+                    writer.write("</b>")
+                    b = true
+                    check1 = false
+                    check2 = false
                     switch = false
                 }
-                if (switch) writer.write(part)
+                else if (i) {
+                    writer.write("<i>")
+                    i = false
+                    check1 = false
+                    switch = false
+                } else {
+                    writer.write("</i>")
+                    i = true
+                    check1 = false
+                    switch = false
+                }
             }
-        if ((line.isEmpty() || line == "/t" || line == "/t/n" || line == " ") && check5) {
-            writer.write("<p>")
-            check5 = false
+            if (part != "~" && check3) {
+                check3 = false
+                writer.write("~")
+            }
+            if (part == "~" && !switch2) if (j != parts.lastIndex) {
+                check3 = true
+                switch = false
+            }
+            if (switch) writer.write(part)
         }
     }
     writer.write("</p>")
