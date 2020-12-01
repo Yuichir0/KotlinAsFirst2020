@@ -5,6 +5,7 @@ package lesson7.task1
 import lesson3.task1.digitNumber
 import java.io.File
 import java.io.PrintStream
+import java.lang.NumberFormatException
 import java.lang.StringBuilder
 import kotlin.math.pow
 
@@ -317,141 +318,129 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var i = true
     var b = true
     var s = true
-    var check1 = false
-    var check2 = false
-    var check3 = false
-    var check4: Boolean
-    var check5 = false
-    var check6 = false
-    var switch2: Boolean
-    var switch: Boolean
+    var singleStarCheck = false
+    var doubleStarCheck = false
+    var tripleStarCheck = false
+    var newLineCheck = false
+    var newLineAtStartCheck = false
+    var starCheck: Boolean
+    var tildeCheck: Boolean
+    var printPartOrNot: Boolean
     for (line in File(inputName).readLines()) {
-        if (line.replace(Regex("""\s*|\t*"""), "").isEmpty() && check6) {
-            check5 = true
+        if (line.replace(Regex("""\s*|\t*"""), "").isEmpty() && newLineAtStartCheck) {
+            newLineCheck = true
             continue
         }
         if (line.replace(Regex("""\s*|\t*"""), "").isEmpty()) continue
-        if (check5 && check6) {
+        if (newLineCheck && newLineAtStartCheck) {
             writer.write("</p><p>")
-            check5 = false
+            newLineCheck = false
         }
         var j = -1
-        val parts = line.chunked(1)
-        for (part in parts) {
+        for (part in line) {
             j++
-            switch2 = false
-            switch = true
-            check4 = true
-            check6 = true
-            if (part == "*" && check1 && check2)
-                if (b && i) {
-                    writer.write("<b><i>")
-                    b = false
-                    i = false
-                    switch = false
-                    check1 = false
-                    check2 = false
-                    check4 = false
-                } else if (b) {
-                    writer.write("<b></i>")
-                    b = false
-                    i = true
-                    switch = false
-                    check1 = false
-                    check2 = false
-                    check4 = false
-                } else if (i) {
-                    writer.write("</b><i>")
-                    b = true
-                    i = false
-                    switch = false
-                    check1 = false
-                    check2 = false
-                    check4 = false
-                } else {
-                    writer.write("</b></i>")
-                    b = true
-                    i = true
-                    switch = false
-                    check1 = false
-                    check2 = false
-                    check4 = false
+            tildeCheck = false
+            printPartOrNot = true
+            starCheck = true
+            newLineAtStartCheck = true
+            if (part == '*' && singleStarCheck && doubleStarCheck) {
+                when {
+                    b && i -> {
+                        writer.write("<b><i>")
+                        b = false
+                        i = false
+                    }
+                    b -> {
+                        writer.write("<b></i>")
+                        b = false
+                        i = true
+                    }
+                    i -> {
+                        writer.write("</b><i>")
+                        b = true
+                        i = false
+                    }
+                    else -> {
+                        writer.write("</b></i>")
+                        b = true
+                        i = true
+                    }
                 }
-            if (part != "*" && check1 && check2)
-                if (b) {
+                printPartOrNot = false
+                singleStarCheck = false
+                doubleStarCheck = false
+                starCheck = false
+            }
+            if (part != '*' && singleStarCheck && doubleStarCheck) {
+                b = if (b) {
                     writer.write("<b>")
-                    b = false
-                    check1 = false
-                    check2 = false
+                    false
                 } else {
                     writer.write("</b>")
-                    b = true
-                    check1 = false
-                    check2 = false
+                    true
                 }
-            if (part != "*" && check1)
-                if (i) {
+                singleStarCheck = false
+                doubleStarCheck = false
+            }
+            if (part != '*' && singleStarCheck) {
+                i = if (i) {
                     writer.write("<i>")
-                    i = false
-                    check1 = false
+                    false
                 } else {
                     writer.write("</i>")
-                    i = true
-                    check1 = false
+                    true
                 }
-            if (part == "~" && check3)
-                if (s) {
+                singleStarCheck = false
+            }
+            if (part == '~' && tripleStarCheck) {
+                s = if (s) {
                     writer.write("<s>")
-                    s = false
-                    check3 = false
-                    switch = false
-                    switch2 = true
+                    false
                 } else {
                     writer.write("</s>")
-                    s = true
-                    check3 = false
-                    switch = false
-                    switch2 = true
+                    true
                 }
-            if (part == "*" && check4) if (j != parts.lastIndex) {
-                check2 = check1
-                check1 = true
-                switch = false
+                tripleStarCheck = false
+                printPartOrNot = false
+                tildeCheck = true
+            }
+            if (part == '*' && starCheck) if (j != line.lastIndex) {
+                doubleStarCheck = singleStarCheck
+                singleStarCheck = true
+                printPartOrNot = false
             } else {
-                if (check1) if (b) {
-                    writer.write("<b>")
-                    b = false
-                    check1 = false
-                    check2 = false
-                    switch = false
+                if (singleStarCheck) {
+                    b = if (b) {
+                        writer.write("<b>")
+                        false
+                    } else {
+                        writer.write("</b>")
+                        true
+                    }
+                    singleStarCheck = false
+                    doubleStarCheck = false
+                    printPartOrNot = false
                 } else {
-                    writer.write("</b>")
-                    b = true
-                    check1 = false
-                    check2 = false
-                    switch = false
-                }
-                else if (i) {
-                    writer.write("<i>")
-                    i = false
-                    check1 = false
-                    switch = false
-                } else {
-                    writer.write("</i>")
-                    i = true
-                    check1 = false
-                    switch = false
+                    i = if (i) {
+                        writer.write("<i>")
+                        false
+                    } else {
+                        writer.write("</i>")
+                        true
+                    }
+                    singleStarCheck = false
+                    printPartOrNot = false
                 }
             }
-            if (part != "~" && check3) {
-                check3 = false
+            if (part != '~' && tripleStarCheck) {
+                tripleStarCheck = false
                 writer.write("~")
             }
-            if (part == "~" && !switch2) if (j != parts.lastIndex) {
-                check3 = true
-                switch = false
+            if (part == '~' && !tildeCheck) if (j != line.lastIndex) {
+                tripleStarCheck = true
+                printPartOrNot = false
             }
-            if (switch) writer.write(part)
+            if (printPartOrNot) writer.write(part.toString())
         }
     }
     writer.write("</p>")
@@ -638,10 +627,10 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         if (firstTimeSwitch) {
             if (minuendLength != subtrahendLength) space.setLength(space.length - 1)
             writer.println("$space$lhv | $rhv")
-            val extraSpace = StringBuilder("   ")
-            for (j in 1..length - minuendLength) extraSpace.append(" ")
+            val extraSpace = StringBuilder(" ".repeat(3))
+            repeat(length - minuendLength) { extraSpace.append(" ") }
             if (minuendLength == subtrahendLength) space.setLength(space.length - 1)
-            for (j in 1 until minuendLength - subtrahendLength) space.append(" ")
+            repeat(minuendLength - subtrahendLength - 1) { space.append(" ") }
             writer.println("$space-$subtrahend$extraSpace$answer")
             firstTimeSwitch = false
         } else {
@@ -650,12 +639,12 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                 space.append(" ")
             } else writer.println(minuend)
             space.setLength(space.length - 1)
-            for (j in 1..minuendLength - subtrahendLength) space.append(" ")
+            repeat(minuendLength - subtrahendLength) { space.append(" ") }
             writer.println("$space-$subtrahend")
         }
-        for (j in 1 until minuendLength - subtrahendLength) space.setLength(space.length - 1)
+        if (minuendLength - subtrahendLength > 1) space.setLength(space.length - minuendLength + subtrahendLength)
         writer.print(space)
-        for (j in 1..maxOf(subtrahendLength, minuendLength - 1)) {
+        repeat(maxOf(subtrahendLength, minuendLength - 1)) {
             writer.print("-")
             space.append(" ")
         }
