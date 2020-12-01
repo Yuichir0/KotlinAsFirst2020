@@ -642,7 +642,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             space.append(" ".repeat(minuendLength - subtrahendLength))
             writer.println("$space-$subtrahend")
         }
-        if (minuendLength - subtrahendLength > 1) space.setLength(space.length - minuendLength + subtrahendLength)
+        if (minuendLength - subtrahendLength > 2) space.setLength(space.length - minuendLength + subtrahendLength)
         writer.print(space)
         repeat(maxOf(subtrahendLength, minuendLength - 1)) {
             writer.print("-")
