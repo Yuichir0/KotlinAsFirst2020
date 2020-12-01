@@ -628,7 +628,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             if (minuendLength != subtrahendLength) space.setLength(space.length - 1)
             writer.println("$space$lhv | $rhv")
             val extraSpace = StringBuilder(" ".repeat(3))
-            repeat(length - minuendLength) { extraSpace.append(" ") }
+            extraSpace.append(" ".repeat(length - minuendLength))
             if (minuendLength == subtrahendLength) space.setLength(space.length - 1)
             repeat(minuendLength - subtrahendLength - 1) { space.append(" ") }
             writer.println("$space-$subtrahend$extraSpace$answer")
@@ -639,7 +639,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                 space.append(" ")
             } else writer.println(minuend)
             space.setLength(space.length - 1)
-            repeat(minuendLength - subtrahendLength) { space.append(" ") }
+            space.append(" ".repeat(minuendLength - subtrahendLength))
             writer.println("$space-$subtrahend")
         }
         if (minuendLength - subtrahendLength > 1) space.setLength(space.length - minuendLength + subtrahendLength)
