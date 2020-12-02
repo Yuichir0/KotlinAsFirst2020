@@ -320,18 +320,18 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var s = true
     var singleStarCheck = false
     var doubleStarCheck = false
-    var tripleStarCheck = false
+    var singleTildeCheck = false
     var newLineCheck = false
     var newLineAtStartCheck = false
     var starCheck: Boolean
     var tildeCheck: Boolean
     var printPartOrNot: Boolean
     for (line in File(inputName).readLines()) {
-        if (line.replace(Regex("""\s*|\t*"""), "").isEmpty() && newLineAtStartCheck) {
+        if (line.trim().isEmpty() && newLineAtStartCheck) {
             newLineCheck = true
             continue
         }
-        if (line.replace(Regex("""\s*|\t*"""), "").isEmpty()) continue
+        if (line.trim().isEmpty()) continue
         if (newLineCheck && newLineAtStartCheck) {
             writer.write("</p><p>")
             newLineCheck = false
@@ -392,7 +392,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 }
                 singleStarCheck = false
             }
-            if (part == '~' && tripleStarCheck) {
+            if (part == '~' && singleTildeCheck) {
                 s = if (s) {
                     writer.write("<s>")
                     false
@@ -400,7 +400,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                     writer.write("</s>")
                     true
                 }
-                tripleStarCheck = false
+                singleTildeCheck= false
                 printPartOrNot = false
                 tildeCheck = true
             }
@@ -432,12 +432,12 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                     printPartOrNot = false
                 }
             }
-            if (part != '~' && tripleStarCheck) {
-                tripleStarCheck = false
+            if (part != '~' && singleTildeCheck) {
+                singleTildeCheck= false
                 writer.write("~")
             }
             if (part == '~' && !tildeCheck) if (j != line.lastIndex) {
-                tripleStarCheck = true
+                singleTildeCheck= true
                 printPartOrNot = false
             }
             if (printPartOrNot) writer.write(part.toString())
