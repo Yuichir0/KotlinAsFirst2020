@@ -82,14 +82,15 @@ data class Circle(val center: Point, val radius: Double) {
      * расстояние между их центрами минус сумма их радиусов.
      * Расстояние между пересекающимися окружностями считать равным 0.0.
      */
-    fun distance(other: Circle): Double = TODO()
+    fun distance(other: Circle): Double = if (this.center.distance(other.center) < this.radius + other.radius) 0.0 else
+        this.center.distance(other.center) - (this.radius + other.radius)
 
     /**
      * Тривиальная (1 балл)
      *
      * Вернуть true, если и только если окружность содержит данную точку НА себе или ВНУТРИ себя
      */
-    fun contains(p: Point): Boolean = TODO()
+    fun contains(p: Point): Boolean = (center.distance(p)) < radius
 }
 
 /**
@@ -109,7 +110,20 @@ data class Segment(val begin: Point, val end: Point) {
  * Дано множество точек. Вернуть отрезок, соединяющий две наиболее удалённые из них.
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
-fun diameter(vararg points: Point): Segment = TODO()
+fun diameter(vararg points: Point): Segment {
+    if (points.size < 2) throw IllegalArgumentException("")
+    var k = 0.0
+    var answer = Segment(Point(0.0, 0.0), Point(0.0, 0.0))
+    for (point1 in points) {
+        for (point2 in points) {
+            if (point1.distance(point2) > k) {
+                k = point1.distance(point2)
+                answer = Segment(point1, point2)
+            }
+        }
+    }
+    return answer
+}
 
 /**
  * Простая (2 балла)
@@ -117,7 +131,12 @@ fun diameter(vararg points: Point): Segment = TODO()
  * Построить окружность по её диаметру, заданному двумя точками
  * Центр её должен находиться посередине между точками, а радиус составлять половину расстояния между ними
  */
-fun circleByDiameter(diameter: Segment): Circle = TODO()
+fun circleByDiameter(diameter: Segment): Circle = Circle(
+    Point(
+        (diameter.begin.x + diameter.end.x) / 2,
+        (diameter.begin.y + diameter.end.y) / 2
+    ), diameter.begin.distance(diameter.end) / 2
+)
 
 /**
  * Прямая, заданная точкой point и углом наклона angle (в радианах) по отношению к оси X.
