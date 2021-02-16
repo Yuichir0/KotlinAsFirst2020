@@ -2,6 +2,9 @@
 
 package lesson11.task1
 
+import java.lang.StringBuilder
+import kotlin.math.pow
+
 /**
  * Класс "комплексное число".
  *
@@ -16,45 +19,67 @@ class Complex(val re: Double, val im: Double) {
     /**
      * Конструктор из вещественного числа
      */
-    constructor(x: Double) : this(TODO(), TODO())
+    constructor(x: Double) : this(x, 0.0)
 
     /**
      * Конструктор из строки вида x+yi
      */
-    constructor(s: String) : this(TODO(), TODO())
+    constructor(s: String) : this(
+        Regex("""(-\d+\.*\d*)|(\d+\.*\d*)""").find(s)!!.value.toDouble(),
+        Regex("""(-\d+\.*\d*)|(\d+\.*\d*)""").findAll(s).last().value.toDouble()
+    )
 
     /**
      * Сложение.
      */
-    operator fun plus(other: Complex): Complex = TODO()
+    operator fun plus(other: Complex): Complex = Complex(other.re + this.re, other.im + this.im)
 
     /**
      * Смена знака (у обеих частей числа)
      */
-    operator fun unaryMinus(): Complex = TODO()
+    operator fun unaryMinus(): Complex = Complex(-re, -im)
 
     /**
      * Вычитание
      */
-    operator fun minus(other: Complex): Complex = TODO()
+    operator fun minus(other: Complex): Complex = Complex(re - other.re, im - other.im)
 
     /**
      * Умножение
      */
-    operator fun times(other: Complex): Complex = TODO()
+    operator fun times(other: Complex): Complex =
+        Complex(re * other.re - im * other.im, re * other.im + other.re * im)
 
     /**
      * Деление
      */
-    operator fun div(other: Complex): Complex = TODO()
+    operator fun div(other: Complex): Complex =
+        Complex(
+            (re * other.re + im * other.im) / (other.re.pow(2) + other.im.pow(2)),
+            (other.re * im - re * other.im) / (other.re.pow(2) + other.im.pow(2)),
+        )
 
     /**
      * Сравнение на равенство
      */
-    override fun equals(other: Any?): Boolean = TODO()
+    override fun equals(other: Any?): Boolean = (other is Complex) && (other.re == re) && (other.im == im)
 
     /**
      * Преобразование в строку
      */
-    override fun toString(): String = TODO()
+    override fun toString(): String {
+        val ans = StringBuilder()
+        if (re < 0) ans.append("-")
+        ans.append("$re")
+        if (im < 0) ans.append("-$im") else
+            ans.append("+$im")
+        ans.append("i")
+        return ans.toString()
+    }
+
+    override fun hashCode(): Int {
+        var result = re.hashCode()
+        result = 31 * result + im.hashCode()
+        return result
+    }
 }
