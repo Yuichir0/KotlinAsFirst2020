@@ -67,12 +67,12 @@ class PhoneBook {
      */
     fun removePhone(name: String, phone: String): Boolean {
         if (name !in book) return false
-        for (number in book[name]!!)
-            if (phone == number) {
+        for (key in book.keys)
+            if (phone in book[key]!!) {
                 book[name]!!.remove(phone)
                 return true
             }
-        TODO()
+        return false
     }
 
     /**
@@ -85,13 +85,25 @@ class PhoneBook {
      * Вернуть имя человека по заданному номеру телефона.
      * Если такого номера нет в книге, вернуть null.
      */
-    fun humanByPhone(phone: String): String? = TODO()
+    fun humanByPhone(phone: String): String? {
+        for (key in book.keys)
+            if (phone in book[key]!!) return key
+        return null
+    }
 
     /**
      * Две телефонные книги равны, если в них хранится одинаковый набор людей,
      * и каждому человеку соответствует одинаковый набор телефонов.
      * Порядок людей / порядок телефонов в книге не должен иметь значения.
      */
-    override fun equals(other: Any?): Boolean = TODO()
+    override fun equals(other: Any?): Boolean {
+        if (other is PhoneBook) {
+            for (key in book.keys)
+                if (book[key]!!.union(other.book[key]!!) != book[key]) return false
+            return true
+        }
+        return false
+    }
+
     override fun hashCode(): Int = book.hashCode()
 }
