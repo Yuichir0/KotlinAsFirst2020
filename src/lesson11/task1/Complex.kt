@@ -2,6 +2,7 @@
 
 package lesson11.task1
 
+import java.lang.NullPointerException
 import java.lang.StringBuilder
 import kotlin.math.pow
 
@@ -25,7 +26,11 @@ class Complex(val re: Double, val im: Double) {
      * Конструктор из строки вида x+yi
      */
     constructor(s: String) : this(
-        Regex("""(-\d+\.*\d*)|(\d+\.*\d*)""").find(s)!!.value.toDouble(),
+        try {
+            Regex("""(-\d+\.*\d*)|(\d+\.*\d*)""").find(s)!!.value.toDouble()
+        } catch (e: NullPointerException) {
+            throw NullPointerException("Incorrect Complex Number Format")
+        },
         Regex("""(-\d+\.*\d*)|(\d+\.*\d*)""").findAll(s).last().value.toDouble()
     )
 
@@ -69,9 +74,8 @@ class Complex(val re: Double, val im: Double) {
      */
     override fun toString(): String {
         val ans = StringBuilder()
-        if (re < 0) ans.append("-")
         ans.append("$re")
-        if (im < 0) ans.append("-$im") else
+        if (im < 0) ans.append("$im") else
             ans.append("+$im")
         ans.append("i")
         return ans.toString()
