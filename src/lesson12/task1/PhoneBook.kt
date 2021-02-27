@@ -19,6 +19,7 @@ package lesson12.task1
  */
 class PhoneBook {
     private val book = mutableMapOf<String, MutableSet<String>>()
+    private val bookNumberHuman = mutableMapOf<String, String>()
 
     /**
      * Добавить человека.
@@ -50,11 +51,9 @@ class PhoneBook {
      * либо такой номер телефона зарегистрирован за другим человеком.
      */
     fun addPhone(name: String, phone: String): Boolean {
-        for (key in book.keys)
-            for (number in book[key]!!)
-                if (phone == number) return false
-        if (name !in book) return false else {
+        if (name !in book || bookNumberHuman[phone] != null) return false else {
             book[name]?.add(phone) ?: return false
+            bookNumberHuman[phone] = name
             return true
         }
     }
@@ -67,12 +66,11 @@ class PhoneBook {
      */
     fun removePhone(name: String, phone: String): Boolean {
         if (name !in book) return false
-        for (key in book.keys)
-            if (phone in book[key]!!) {
-                book[name]!!.remove(phone)
-                return true
-            }
-        return false
+        else if (bookNumberHuman[phone] != name) return false else {
+            book[name]!!.remove(phone)
+            bookNumberHuman.remove(phone)
+            return true
+        }
     }
 
     /**
@@ -97,11 +95,7 @@ class PhoneBook {
      * Порядок людей / порядок телефонов в книге не должен иметь значения.
      */
     override fun equals(other: Any?): Boolean {
-        if (other is PhoneBook) {
-            for (key in book.keys)
-                if (book[key]!!.union(other.book[key]!!) != book[key]) return false
-            return true
-        }
+        if (other is PhoneBook && book == other.book) return true
         return false
     }
 
