@@ -28,7 +28,7 @@ class Complex(val re: Double, val im: Double) {
      */
     constructor(s: String) : this(
         Regex("""(-\d+\.*\d*)|(\d+\.*\d*)""").find(s)?.value?.toDouble()
-            ?: throw throw IllegalArgumentException("Incorrect Complex Number Format"),
+            ?: throw IllegalArgumentException("Incorrect Complex Number Format"),
         Regex("""(-\d+\.*\d*)|(\d+\.*\d*)""").findAll(s).last().value.toDouble()
     )
 
