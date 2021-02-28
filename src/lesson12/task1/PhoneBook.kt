@@ -83,11 +83,7 @@ class PhoneBook {
      * Вернуть имя человека по заданному номеру телефона.
      * Если такого номера нет в книге, вернуть null.
      */
-    fun humanByPhone(phone: String): String? {
-        for (key in book.keys)
-            if (phone in book[key]!!) return key
-        return null
-    }
+    fun humanByPhone(phone: String): String? = bookNumberHuman[phone]
 
     /**
      * Две телефонные книги равны, если в них хранится одинаковый набор людей,
